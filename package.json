@@ -1,0 +1,33 @@
+{
+	"name": "havocblitz",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "webpack",
+		"dev": "concurrently \"npx webpack --watch\" \"npx http-server ./dist\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jojo259/havocblitz.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/jojo259/havocblitz/issues"
+	},
+	"homepage": "https://github.com/jojo259/havocblitz#readme",
+	"dependencies": {
+		"clean-webpack-plugin": "^4.0.0",
+		"concurrently": "^8.0.1",
+		"copy-webpack-plugin": "^11.0.0",
+		"dotenv": "^16.0.3",
+		"peerjs": "^1.4.7",
+		"ts-loader": "^9.4.2",
+		"typescript": "^5.0.4",
+		"webpack": "^5.81.0",
+		"webpack-cli": "^5.0.2"
+	}
+}
