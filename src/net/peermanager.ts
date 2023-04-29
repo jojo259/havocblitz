@@ -1,8 +1,13 @@
-import { Peer } from "peerjs";
+import { Peer, DataConnection } from "peerjs";
 
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
-export let otherPeersList = [];
+
+interface PeerConnections {
+	[peerId: string]: DataConnection;
+}
+
+export let peerConnections: PeerConnections = {};
 
 function getRandomInt(min: number, max: number): number{
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -33,4 +38,12 @@ clientPeer.on('disconnected', function() {
 
 clientPeer.on('close', function() {
 	console.log("peer closed")
+});
+
+window.addEventListener("beforeunload", (event) => {
+	console.log("closing all connections and destroying client peer");
+	for (const [peerId, conn] of Object.entries(peerConnections)) {
+		conn.close();
+	}
+	clientPeer.destroy();
 });
