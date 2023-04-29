@@ -18,6 +18,14 @@ export function getRandomPeerId(): string {
 	return randomPeerId;
 }
 
+export function sendData(dataStr: string){
+	console.log("sending data: " + dataStr);
+	for (const [peerId, conn] of Object.entries(peerConnections)) {
+		console.log("to " + peerId)
+		conn.send(dataStr);
+	}
+}
+
 export function ingestPotentialPeerConnection(conn: DataConnection){
 	conn.on("data", (data) => {
 		console.log("received msg: " + data);
