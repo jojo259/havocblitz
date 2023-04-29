@@ -44,6 +44,7 @@ window.addEventListener("beforeunload", (event) => {
 	console.log("closing all connections and destroying client peer");
 	for (const [peerId, conn] of Object.entries(peerConnections)) {
 		conn.close();
+		delete peerConnections[peerId];
 	}
 	clientPeer.destroy();
 });
