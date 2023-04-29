@@ -21,7 +21,6 @@ export function getRandomPeerId(): string {
 export function ingestPotentialPeerConnection(conn: DataConnection){
 	conn.on("data", (data) => {
 		console.log("received msg: " + data);
-		alert("received msg: " + data)
 	});
 	conn.on("open", () => {
 		console.log("connected to peer")
