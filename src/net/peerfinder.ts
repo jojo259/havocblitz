@@ -1,8 +1,18 @@
 import { Peer } from "peerjs";
-import { peerIdPrefix, maxPeerIdNum, getRandomPeerId, clientPeer } from "./peermanager";
+import { peerIdPrefix, maxPeerIdNum, clientPeer } from "./peermanager";
+
+let atRandomPeerNum = 0;
+
+export function incrementRandomPeerNum(){
+	atRandomPeerNum += 1;
+	if (atRandomPeerNum > maxPeerIdNum) {
+		atRandomPeerNum = 1;
+	}
+}
 
 export function findRandomPeer(){
-	let randomPeerId = getRandomPeerId();
+	incrementRandomPeerNum();
+	let randomPeerId = peerIdPrefix + atRandomPeerNum;
 	console.log("attempting to connect to random peer with id " + randomPeerId);
 
 	const conn = clientPeer.connect(randomPeerId);
