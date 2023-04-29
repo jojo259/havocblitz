@@ -1,4 +1,6 @@
 import { Peer, DataConnection } from "peerjs";
+import { Player } from "../game/entities/player";
+import { addNewPlayer } from "../game/entitymanager";
 
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
@@ -34,6 +36,7 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 		console.log("connected to peer")
 		conn.send("hello!");
 		peerConnections[conn.peer] = conn;
+		addNewPlayer(conn.peer);
 	});
 	conn.on("close", () => {
 		console.log("connection closed");
@@ -46,10 +49,10 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 	});
 }
 
-let myId = getRandomPeerId();
-console.log("my peer id is " + myId);
+export let clientPeerId = getRandomPeerId();
+console.log("my peer id is " + clientPeerId);
 
-export let clientPeer = new Peer(myId)
+export let clientPeer = new Peer(clientPeerId)
 
 clientPeer.on('error', function(err: any) {
 	if (err.type == "peer-unavailable") {
