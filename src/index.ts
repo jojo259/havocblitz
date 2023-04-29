@@ -7,7 +7,7 @@ import { addListeners } from "./game/keytracker";
 
 resetCanvasSize();
 
-setInterval(findRandomPeer, 5000)
+setInterval(findRandomPeer, 1000)
 
 setInterval(doTick, 1000 / 64);
 setInterval(drawGame, 1000 / 64);
