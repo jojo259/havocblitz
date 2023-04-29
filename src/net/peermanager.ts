@@ -18,6 +18,27 @@ export function getRandomPeerId(): string {
 	return randomPeerId;
 }
 
+export function ingestPotentialPeerConnection(conn: DataConnection){
+	conn.on("data", (data) => {
+		console.log("received msg: " + data);
+		alert("received msg: " + data)
+	});
+	conn.on("open", () => {
+		console.log("connected to peer")
+		conn.send("hello!");
+		peerConnections[conn.peer] = conn;
+	});
+	conn.on("close", () => {
+		console.log("connection closed");
+		delete peerConnections[conn.peer];
+	});
+	conn.on("error", (err: any) => {
+		console.log(err.type)
+		console.log(err)
+		delete peerConnections[conn.peer];
+	});
+}
+
 let myId = getRandomPeerId();
 console.log("my peer id is " + myId);
 
@@ -38,6 +59,10 @@ clientPeer.on('disconnected', function() {
 
 clientPeer.on('close', function() {
 	console.log("peer closed")
+});
+
+clientPeer.on("connection", (conn) => {
+	ingestPotentialPeerConnection(conn);
 });
 
 window.addEventListener("beforeunload", (event) => {

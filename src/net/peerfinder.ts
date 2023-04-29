@@ -1,5 +1,5 @@
 import { Peer } from "peerjs";
-import { peerIdPrefix, maxPeerIdNum, clientPeer, peerConnections } from "./peermanager";
+import { peerIdPrefix, maxPeerIdNum, clientPeer, peerConnections, ingestPotentialPeerConnection } from "./peermanager";
 
 let atRandomPeerNum = 0;
 
@@ -22,22 +22,5 @@ export function findRandomPeer(){
 	}
 
 	const conn = clientPeer.connect(randomPeerId);
-	conn.on("data", (data) => {
-		console.log("received msg: " + data);
-		alert("received msg: " + data)
-	});
-	conn.on("open", () => {
-		console.log("connected to peer")
-		conn.send("hello!");
-		peerConnections[randomPeerId] = conn;
-	});
-	conn.on("close", () => {
-		console.log("connection closed");
-		delete peerConnections[randomPeerId];
-	});
-	conn.on("error", (err: any) => {
-		console.log(err.type)
-		console.log(err)
-		delete peerConnections[randomPeerId];
-	});
+	ingestPotentialPeerConnection(conn);
 }
