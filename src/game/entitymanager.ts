@@ -15,7 +15,7 @@ export function addNewPlayer(peerId: string) {
 	entityList.push(newPlayer);
 }
 
-export function doTick() {
+export function doEntityTicks() {
 	entityList.forEach(entity => {
 		entity.tick();
 	});
