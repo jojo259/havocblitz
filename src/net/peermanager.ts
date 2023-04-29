@@ -21,20 +21,16 @@ export function getRandomPeerId(): string {
 }
 
 export function sendData(dataStr: string){
-	console.log("sending data: " + dataStr);
 	for (const [peerId, conn] of Object.entries(peerConnections)) {
-		console.log("to " + peerId)
 		conn.send(dataStr);
 	}
 }
 
 export function ingestPotentialPeerConnection(conn: DataConnection){
 	conn.on("data", (data) => {
-		console.log("received msg: " + data);
 	});
 	conn.on("open", () => {
 		console.log("connected to peer")
-		conn.send("hello!");
 		peerConnections[conn.peer] = conn;
 		addNewPlayer(conn.peer);
 	});
