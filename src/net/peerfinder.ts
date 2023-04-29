@@ -17,6 +17,11 @@ export function findRandomPeer(){
 	console.log("current connections:");
 	console.log(peerConnections);
 
+	if (peerConnections.hasOwnProperty(randomPeerId)) {
+		console.log("already connected to this peer");
+		return;
+	}
+
 	const conn = clientPeer.connect(randomPeerId);
 	conn.on("data", (data) => {
 		console.log("received msg: " + data);
