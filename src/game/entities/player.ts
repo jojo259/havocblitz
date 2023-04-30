@@ -6,6 +6,7 @@ export class Player extends PhysicsEntity {
 
 	id: string;
 	playerSpeedX = 0.05;
+	lastPositionEventTimestamp = 0;
 
 	constructor(id: string, posX: number, posY: number) {
 		super(posX, posY, 0.2, 1, 1, "./game/sprites/player.png");

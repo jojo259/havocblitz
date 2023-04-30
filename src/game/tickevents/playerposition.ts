@@ -17,8 +17,15 @@ export class PlayerPosition extends TickEvent {
 		entityList.forEach(entity => {
 			if (entity instanceof Player) {
 				if (entity.id == json.peerId) {
-					entity.posX = json.newPosX;
-					entity.posY = json.newPosY;
+					let timeDiff = json.timestamp - entity.lastPositionEventTimestamp;
+					if (timeDiff > 0) {
+						entity.posX = json.newPosX;
+						entity.posY = json.newPosY;
+						entity.lastPositionEventTimestamp = json.timestamp;
+					}
+					else {
+						console.log("PlayerPosition event is old by:" + (timeDiff * -1) + "ms");
+					}
 				}
 			}
 		});
