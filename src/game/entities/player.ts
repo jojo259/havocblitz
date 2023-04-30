@@ -16,7 +16,7 @@ export class Player extends PhysicsEntity {
 		super.tick();
 		if (this == clientPlayerEntity) {
 			if (keyState["w"]) {
-				this.velocityY = -1;
+				this.velocityY = -0.3;
 			}
 			if (keyState["s"]) {
 				this.velocityY += 0.1;
