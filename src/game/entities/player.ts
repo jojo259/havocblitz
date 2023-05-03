@@ -5,7 +5,7 @@ import { keyState } from "../keytracker";
 export class Player extends PhysicsEntity {
 
 	id: string;
-	playerSpeedX = 0.05;
+	playerSpeedX = 0.1;
 	lastPositionEventTimestamp = 0;
 
 	constructor(id: string, posX: number, posY: number) {
@@ -16,8 +16,9 @@ export class Player extends PhysicsEntity {
 	tick(): void {
 		if (this == clientPlayerEntity) {
 			super.tick();
-			if (keyState["w"]) {
-				this.velocityY = -0.3;
+			if (keyState["w"] && this.canJump) {
+				this.velocityY = -0.4;
+				this.canJump = false;
 			}
 			if (keyState["s"]) {
 				this.velocityY += 0.1;

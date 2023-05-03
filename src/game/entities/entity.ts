@@ -3,24 +3,24 @@ import { drawImageRelativeCircular } from "../renderer";
 export abstract class Entity {
 	posX: number;
 	posY: number;
-	radius: number;
+	diameter: number;
 	sprite: HTMLImageElement;
 
 	constructor(
 		posX: number,
 		posY: number,
-		radius: number,
+		diameter: number,
 		spriteSrc: string
 	) {
 		this.posX = posX;
 		this.posY = posY;
-		this.radius = radius;
+		this.diameter = diameter;
 		this.sprite = new Image();
 		this.sprite.src = spriteSrc;
 	}
 
 	draw() {
-		drawImageRelativeCircular(this.sprite, this.posX, this.posY, this.radius);
+		drawImageRelativeCircular(this.sprite, this.posX, this.posY, this.diameter);
 	}
 
 	abstract tick(): void;

@@ -6,7 +6,7 @@ export let entityList: Entity[] = [];
 export let clientPlayerEntity: Player;
 
 export function addClientPlayerEntity() {
-	clientPlayerEntity = new Player(clientPeerId, 2, 2);
+	clientPlayerEntity = new Player(clientPeerId, 2, 3);
 	entityList.push(clientPlayerEntity);
 }
 

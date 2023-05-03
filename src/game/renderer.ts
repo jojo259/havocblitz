@@ -11,8 +11,8 @@ export function drawGame() {
 	renderMap();
 }
 
-export function drawImageRelativeCircular(image: CanvasImageSource, drawX: number, drawY: number, drawRadius: number) {
-	drawImageRelative(image, drawX - drawRadius / 2, drawY - drawRadius / 2, drawRadius, drawRadius)
+export function drawImageRelativeCircular(image: CanvasImageSource, drawX: number, drawY: number, drawDiameter: number) {
+	drawImageRelative(image, drawX - drawDiameter / 2, drawY - drawDiameter / 2, drawDiameter, drawDiameter)
 }
 
 export function drawImageRelative(image: CanvasImageSource, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number) {
