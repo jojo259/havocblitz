@@ -1,12 +1,12 @@
 import { clientPeerId } from "../../net/peermanager";
 
-export abstract class TickEvent {
+export abstract class Event {
 	peerId: string = clientPeerId;
-	tickType: string;
+	type: string;
 	timestamp: number = Date.now();
 
-	constructor(tickType: string) {
-		this.tickType = tickType;
+	constructor(type: string) {
+		this.type = type;
 	}
 
 	static doEvent(json: any): void {

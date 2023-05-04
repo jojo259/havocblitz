@@ -1,28 +1,32 @@
 import { doEntityTicks, clientPlayerEntity } from "./entitymanager";
-import { TickEvent } from "./tickevents/tickevent";
-import { PlayerPosition } from "./tickevents/playerposition";
+import { Event } from "./events/event";
+import { PlayerPosition } from "./events/playerposition";
 import { sendData } from "../net/peermanager";
 
-interface QueuedTickEvents extends Array<TickEvent> {
-	[index: number]: TickEvent;
+interface QueuedEvents extends Array<Event> {
+	[index: number]: Event;
 }
 
-let queuedTickEvents: QueuedTickEvents = [];
+let queuedEvents: QueuedEvents = [];
 
 export function doGameTick() {
 	doEntityTicks();
 	queueClientPositionUpdate();
-	sendTickEvents();
+	sendEvents();
 }
 
-export function sendTickEvents() {
-	let sendObj = {"events": queuedTickEvents};
+export function sendEvents() {
+	let sendObj = {"events": queuedEvents};
 	let sendStr = JSON.stringify(sendObj);
 	sendData(sendStr);
-	queuedTickEvents.length = 0;
+	queuedEvents.length = 0;
+}
+
+export function queueEvent() {
+
 }
 
 function queueClientPositionUpdate() {
 	let newEvent = new PlayerPosition(clientPlayerEntity.posX, clientPlayerEntity.posY);
-	queuedTickEvents.push(newEvent);
+	queuedEvents.push(newEvent);
 }

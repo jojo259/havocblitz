@@ -1,8 +1,8 @@
-import { TickEvent } from "./tickevent";
+import { Event } from "./event";
 import { Player } from "../entities/player";
 import { entityList } from "../entitymanager";
 
-export class PlayerPosition extends TickEvent {
+export class PlayerPosition extends Event {
 
 	newPosX: number;
 	newPosY: number;

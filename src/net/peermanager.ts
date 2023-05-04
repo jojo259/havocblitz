@@ -1,7 +1,7 @@
 import { Peer, DataConnection } from "peerjs";
 import { Player } from "../game/entities/player";
 import { addNewPlayer } from "../game/entitymanager";
-import { processReceivedTickEvents } from "../game/tickingestor";
+import { processReceivedEvents } from "../game/tickingestor";
 
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
@@ -33,7 +33,7 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 			let dataJson: JSON = JSON.parse(data);
 			if ("events" in dataJson) {
 				if (Array.isArray(dataJson.events)) {
-					processReceivedTickEvents(dataJson.events);
+					processReceivedEvents(dataJson.events);
 				}
 			}
 		}
