@@ -5,12 +5,20 @@ import { keyState } from "../keytracker";
 export class Player extends PhysicsEntity {
 
 	id: string;
+	team: string;
 	playerSpeedX = 0.1;
 	lastPositionEventTimestamp = 0;
 
-	constructor(id: string, posX: number, posY: number) {
-		super(posX, posY, 0.2, 1, 1, "./game/sprites/player.png");
+	constructor(
+		id: string,
+		team: string,
+		spriteSrc: string,
+		posX: number, 
+		posY: number,
+		) {
+		super(posX, posY, 0.2, 1, 1, spriteSrc);
 		this.id = id;
+		this.team = team;
 	}
 
 	tick(): void {
