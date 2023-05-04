@@ -1,6 +1,7 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
 import { keyState } from "../keytracker";
+import { drawTextRelative } from "../renderer";
 
 export class Player extends PhysicsEntity {
 
@@ -38,5 +39,10 @@ export class Player extends PhysicsEntity {
 				this.velocityX += this.playerSpeedX;
 			}
 		}
+	}
+
+	draw(): void {
+		super.draw();
+		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
 	}
 }

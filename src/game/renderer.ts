@@ -16,7 +16,22 @@ export function drawImageRelativeCircular(image: CanvasImageSource, drawX: numbe
 }
 
 export function drawImageRelative(image: CanvasImageSource, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number) {
-	canvasContext.drawImage(image, (drawX - clientPlayerEntity.posX + renderScaleX / 2 - 0.5) * canvasScale, (drawY - clientPlayerEntity.posY + renderScaleY / 2 - 0.5) * canvasScale, drawSizeX * canvasScale, drawSizeY * canvasScale);
+	canvasContext.drawImage(image, getRelativeX(drawX), getRelativeY(drawY), drawSizeX * canvasScale, drawSizeY * canvasScale);
+}
+
+export function drawTextRelative(content: string, color: string, drawX: number, drawY: number) {
+	canvasContext.font = "16px Arial";
+	canvasContext.fillStyle = color;
+	canvasContext.textAlign = "center";
+	canvasContext.fillText(content, getRelativeX(drawX), getRelativeY(drawY));
+}
+
+function getRelativeX(x: number): number {
+	return (x - clientPlayerEntity.posX + renderScaleX / 2 - 0.5) * canvasScale;
+}
+
+function getRelativeY(y: number): number {
+	return (y - clientPlayerEntity.posY + renderScaleY / 2 - 0.5) * canvasScale;
 }
 
 function clearCanvas() {
