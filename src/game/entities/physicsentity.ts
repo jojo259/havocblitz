@@ -43,16 +43,20 @@ export class PhysicsEntity extends Entity {
 		this.velocityX = Math.sign(this.velocityX) * Math.min(Math.abs(this.velocityX), this.maximumVelocityX);
 		this.velocityY = Math.sign(this.velocityY) * Math.min(Math.abs(this.velocityY), this.maximumVelocityY);
 
-		let nextPosX = this.posX + this.velocityX;
 		if (this.positionWouldBeInsideTile(this.posX + this.velocityX, this.posY)) {
+			if (Math.abs(this.velocityX) > 0) {
+				this.posX = Math.round(this.posX + this.velocityX) - Math.sign(this.velocityX) * this.diameter / 2 - Math.sign(this.velocityX) * 0.01;
+			}
 			this.velocityX = 0;
 		}
 		else {
 			this.posX += this.velocityX;
 		}
-		let nextPosY = this.posY + this.velocityY;
 		if (this.positionWouldBeInsideTile(this.posX, this.posY + this.velocityY)) {
-			if (this.velocityY > 0) {
+			if (Math.abs(this.velocityY) > 0) {
+				this.posY = Math.round(this.posY + this.velocityY) - Math.sign(this.velocityY) * this.diameter / 2 - Math.sign(this.velocityY) * 0.01;
+			}
+			if (this.velocityY > 0) { // hitting the top of a tile rather than the bottom
 				this.canJump = true;
 			}
 			this.velocityY = 0;
