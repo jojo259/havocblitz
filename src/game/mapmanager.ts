@@ -80,7 +80,7 @@ function runCellularAutomaton(mapArray: number[][], width: number, height: numbe
 
 export let tileMap = generateMap(mapWidth, mapHeight);
 
-function generateSpawn(mapArray: number[][], width: number, height: number): number[]{
+export function generateSpawn(mapArray: number[][], width: number, height: number): number[]{
 	while(true){
 		let wallFound = false
 		let randomWidth = Math.floor(Math.random() * width);
