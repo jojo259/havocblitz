@@ -5,6 +5,7 @@ export abstract class Entity {
 	posY: number;
 	diameter: number;
 	sprite: HTMLImageElement;
+	initializedAt = Date.now();
 
 	constructor(
 		posX: number,
