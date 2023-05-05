@@ -6,6 +6,8 @@ const tileImage = new Image();
 tileImage.src = "./game/sprites/tile.png";
 let mapDensity = 40; //Change for more or less density (ranges from 1-100)
 let genAmount = 2; //how many cycles to generate
+export let mapWidth = 300;
+export let mapHeight = 200;
 
 export function renderMap() {
 	let startX = Math.floor(Math.max(0, clientPlayerEntity.posX - renderScaleX / 2));
@@ -90,7 +92,32 @@ export function generate(mapArray: number[][], width: number, height: number): n
 	return mapArray;
 }
 
-export let tileMap = generateMap(300, 200);
+export let tileMap = generateMap(mapWidth, mapHeight);
+
+export function generateSpawn(mapArray: number[][], width: number, height: number): number[]{
+	while(true){
+		let wallFound = false
+		let randomWidth = Math.floor(Math.random() * width);
+		let randomHeight = Math.floor(Math.random() * height);
+		while((randomWidth == (0 || width)) || (randomHeight == (0 || height))){
+			randomWidth = Math.floor(Math.random() * width);
+			randomHeight = Math.floor(Math.random() * height);
+		}
+		for(let x = randomWidth-1; x < randomWidth+2; x++){
+			for(let y = randomHeight-1; y < randomHeight+1; y++){
+				if(mapArray[y][x] == 1){
+					wallFound = true;
+				}
+			}
+		}
+		if(wallFound){
+			continue;
+		}
+		else{
+			return [randomWidth, randomHeight];
+		}
+	}
+}
 
 /*
 export let tileMap: number[][] = [

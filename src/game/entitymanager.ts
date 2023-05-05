@@ -1,6 +1,7 @@
 import { Entity } from "./entities/entity";
 import { Player } from "./entities/player";
 import { clientPeerId } from "../net/peermanager";
+import { tileMap, generateSpawn, mapWidth, mapHeight} from "./mapmanager";
 
 export let entityList: Entity[] = [];
 export let clientPlayerEntity: Player;
@@ -25,12 +26,14 @@ export function setPlayerTeam(peerId: string, posX: number, posY: number): Playe
 }
 
 export function addClientPlayerEntity() {
-	clientPlayerEntity = setPlayerTeam(clientPeerId, 2, 3);
+	let spawnCoords = generateSpawn(tileMap, mapWidth, mapHeight);
+	clientPlayerEntity = setPlayerTeam(clientPeerId, spawnCoords[0], spawnCoords[1]);
 	entityList.push(clientPlayerEntity);
 }
 
 export function addNewPlayer(peerId: string) {
-	let newPlayer = setPlayerTeam(peerId, 0, 0);
+	let spawnCoords = generateSpawn(tileMap, mapWidth, mapHeight);
+	let newPlayer = setPlayerTeam(peerId, spawnCoords[0], spawnCoords[1]);
 	entityList.push(newPlayer);
 }
 
