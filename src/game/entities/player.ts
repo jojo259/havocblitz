@@ -17,7 +17,7 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 		) {
-		super(posX, posY, 0.2, 1, 1, spriteSrc);
+		super(posX, posY, 0.2, 1, 0.95, spriteSrc);
 		this.id = id;
 		this.team = team;
 	}
