@@ -6,10 +6,10 @@ import { renderHUD } from "./hud";
 
 export function drawGame() {
 	clearCanvas();
+	renderMap();
 	entityList.forEach(entity => {
 		entity.draw();
 	});
-	renderMap();
 	renderHUD();
 }
 
