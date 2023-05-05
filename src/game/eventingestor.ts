@@ -1,5 +1,6 @@
 import { Event } from "./events/event";
 import { PlayerPosition } from "./events/playerposition";
+import { MapSend } from "./events/mapsend";
 
 export function processReceivedEvents(receivedEvents: any[]): void {
 	for (const eventJSON of receivedEvents) {
@@ -9,7 +10,11 @@ export function processReceivedEvents(receivedEvents: any[]): void {
 			case "PlayerPosition":
 				PlayerPosition.doEvent(eventJSON);
 				break;
+			case "MapSend":
+				MapSend.doEvent(eventJSON);
+				break;
 			default:
+				console.log("unknown event type: " + eventType)
 				continue;
 		}
 	}
