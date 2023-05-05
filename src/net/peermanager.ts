@@ -55,6 +55,11 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 		console.log(err)
 		delete peerConnections[conn.peer];
 	});
+	setTimeout(() => {
+		if (!conn.open) {
+			conn.close();
+		}
+	}, 8000);
 }
 
 export let clientPeerId = getRandomPeerId();
