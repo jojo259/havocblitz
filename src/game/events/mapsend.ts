@@ -22,5 +22,6 @@ export class MapSend extends Event {
 				tileMap[x][y] = json.sentMap[x][y];
 			}
 		}
+		clientPlayerEntity.findSpawn();
 	}
 }

@@ -6,20 +6,18 @@ import { drawTextRelative } from "../renderer";
 export class Player extends PhysicsEntity {
 
 	id: string;
-	team: string;
 	playerSpeedX = 0.1;
 	lastPositionEventTimestamp = 0;
+	team: string = "null";
 
 	constructor(
 		id: string,
-		team: string,
-		spriteSrc: string,
 		posX: number, 
 		posY: number,
-		) {
-		super(posX, posY, 0.2, 1, 0.95, spriteSrc);
+	) {
+		super(posX, posY, 0.2, 1, 0.95, "game/sprites/player.png");
 		this.id = id;
-		this.team = team;
+		this.setTeam();
 	}
 
 	tick(): void {
@@ -44,5 +42,25 @@ export class Player extends PhysicsEntity {
 	draw(): void {
 		super.draw();
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
+	}
+
+	setTeam() {
+		let team="", newSpriteSrc="";
+		let pureID = +this.id.replace(/\D/g, "");
+		if (pureID % 2 == 0){
+			team = "red";
+			newSpriteSrc = "game/sprites/playerred.png";
+		}
+		else if (pureID % 2 == 1){
+			team = "blue";
+			newSpriteSrc = "game/sprites/playerblue.png";
+		}
+		else{
+			team = "NaN";
+			newSpriteSrc = "game/sprites/player.png";
+		}
+		console.log("set player team to " + team);
+		this.sprite.src = newSpriteSrc;
+		this.team = team;
 	}
 }
