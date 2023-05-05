@@ -2,6 +2,7 @@ import { Entity } from "./entities/entity";
 import { canvasContext, canvasScale, renderScaleX, renderScaleY } from "../page/canvas";
 import { entityList, clientPlayerEntity } from "./entitymanager";
 import { renderMap } from "./mapmanager";
+import { renderHUD } from "./hud";
 
 export function drawGame() {
 	clearCanvas();
@@ -9,6 +10,7 @@ export function drawGame() {
 		entity.draw();
 	});
 	renderMap();
+	renderHUD();
 }
 
 export function drawImageRelativeCircular(image: CanvasImageSource, drawX: number, drawY: number, drawDiameter: number) {
@@ -27,11 +29,11 @@ export function drawTextRelative(content: string, color: string, drawX: number, 
 }
 
 function getRelativeX(x: number): number {
-	return (x - clientPlayerEntity.posX + renderScaleX / 2 - 0.5) * canvasScale;
+	return (x - clientPlayerEntity.posX + renderScaleX / 2) * canvasScale;
 }
 
 function getRelativeY(y: number): number {
-	return (y - clientPlayerEntity.posY + renderScaleY / 2 - 0.5) * canvasScale;
+	return (y - clientPlayerEntity.posY + renderScaleY / 2) * canvasScale;
 }
 
 function clearCanvas() {

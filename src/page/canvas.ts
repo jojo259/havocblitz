@@ -1,4 +1,4 @@
-const canvasElem = document.getElementById("gamecanvas") as HTMLCanvasElement;
+export const canvasElem = document.getElementById("gamecanvas") as HTMLCanvasElement;
 export const canvasContext = canvasElem.getContext("2d")!;
 
 export let canvasScale = 0;
