@@ -24,7 +24,7 @@ export class PlayerPosition extends Event {
 						entity.lastPositionEventTimestamp = json.timestamp;
 					}
 					else {
-						console.log("PlayerPosition event is old by:" + (timeDiff * -1) + "ms");
+						console.log("PlayerPosition event is old by: " + (timeDiff * -1) + "ms");
 					}
 				}
 			}
