@@ -5,6 +5,9 @@ import { MapSend } from "../game/events/mapsend";
 import { queueEvent } from "../game/tickingmanager";
 import { processReceivedEvents } from "../game/eventingestor";
 
+export let clientPeerId: string;
+export let clientPeer: Peer;
+
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
 
@@ -13,6 +16,46 @@ interface PeerConnections {
 }
 
 export let peerConnections: PeerConnections = {};
+
+initClientPeer();
+
+function initClientPeer() {
+	clientPeerId = getRandomPeerId();
+	console.log("client peer id is " + clientPeerId);
+
+	clientPeer = new Peer(clientPeerId)
+
+	clientPeer.on('error', function(err: any) {
+		if (err.type == "peer-unavailable") {
+			return;
+		}
+		/*
+		if (err.type == "unavailable-id") {
+			console.log("client peer id unavailable, remaking client peer")
+			initClientPeer();
+			setTimeout(() => {
+				initClientPeer();
+			}, 1000);
+			return;
+		}
+		*/
+		console.log(err.type)
+		console.log(err)
+	});
+
+	clientPeer.on('disconnected', function() {
+		console.log("client peer disconnected, reconnecting");
+		clientPeer.reconnect();
+	});
+
+	clientPeer.on('close', function() {
+		console.log("client peer closed")
+	});
+
+	clientPeer.on("connection", (conn) => {
+		ingestPotentialPeerConnection(conn);
+	});
+}
 
 function getRandomInt(min: number, max: number): number{
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -57,36 +100,11 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 	});
 	setTimeout(() => {
 		if (!conn.open) {
+			console.log("closing unopen connection");
 			conn.close();
 		}
 	}, 8000);
 }
-
-export let clientPeerId = getRandomPeerId();
-console.log("my peer id is " + clientPeerId);
-
-export let clientPeer = new Peer(clientPeerId)
-
-clientPeer.on('error', function(err: any) {
-	if (err.type == "peer-unavailable") {
-		return;
-	}
-	console.log(err.type)
-	console.log(err)
-});
-
-clientPeer.on('disconnected', function() {
-	console.log("disconnected, reconnecting");
-	clientPeer.reconnect();
-});
-
-clientPeer.on('close', function() {
-	console.log("peer closed")
-});
-
-clientPeer.on("connection", (conn) => {
-	ingestPotentialPeerConnection(conn);
-});
 
 window.addEventListener("beforeunload", (event) => {
 	console.log("closing all connections and destroying client peer");
