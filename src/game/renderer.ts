@@ -1,16 +1,24 @@
 import { Entity } from "./entities/entity";
-import { canvasContext, canvasScale, renderScaleX, renderScaleY } from "../page/canvas";
+import { canvasElem, canvasContext, canvasScale, renderScaleX, renderScaleY } from "../page/canvas";
 import { entityList, clientPlayerEntity } from "./entitymanager";
-import { renderMap } from "./mapmanager";
+import { renderMap, mapWidth, mapHeight } from "./mapmanager";
 import { renderHUD } from "./hud";
+
+const backgroundImage = new Image();
+backgroundImage.src = "./game/sprites/background.png";
 
 export function drawGame() {
 	clearCanvas();
+	renderBackground();
 	renderMap();
 	entityList.forEach(entity => {
 		entity.draw();
 	});
 	renderHUD();
+}
+
+function renderBackground() {
+	canvasContext.drawImage(backgroundImage, clientPlayerEntity.posX / mapWidth * canvasElem.width * -1, clientPlayerEntity.posY / mapHeight * canvasElem.height * -1, canvasElem.width * 2, canvasElem.height * 2);
 }
 
 export function drawImageRelativeCircular(image: CanvasImageSource, drawX: number, drawY: number, drawDiameter: number) {
