@@ -3,7 +3,7 @@ import { findRandomPeer } from "./net/peerfinder"
 import { sendData } from "./net/peermanager";
 import { addClientPlayerEntity } from "./game/entitymanager";
 import { doGameTick } from "./game/tickingmanager"
-import { drawGame } from "./game/renderer";
+import { drawGame } from "./game/render/renderingmanager";
 import { addListeners } from "./game/keytracker";
 
 resetCanvasSize();

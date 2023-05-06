@@ -1,7 +1,7 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPresses } from "../keytracker";
-import { drawTextRelative } from "../renderer";
+import { drawTextRelative } from "../render/renderingmanager";
 
 let playerSpeedX = 0.1;
 

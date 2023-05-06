@@ -1,6 +1,6 @@
 import { Entity } from "./entity";
 import { tileMap, getTileValue } from "../mapmanager";
-import { drawImageRelative } from "../renderer";
+import { drawImageRelative } from "../render/renderingmanager";
 
 export class PhysicsEntity extends Entity {
 	velocityX: number;

@@ -1,7 +1,7 @@
-import { Entity } from "./entities/entity";
-import { canvasElem, canvasContext, canvasScale, renderScaleX, renderScaleY } from "../page/canvas";
-import { entityList, clientPlayerEntity } from "./entitymanager";
-import { renderMap, mapWidth, mapHeight } from "./mapmanager";
+import { Entity } from "../entities/entity";
+import { canvasElem, canvasContext, canvasScale, renderScaleX, renderScaleY } from "../../page/canvas";
+import { entityList, clientPlayerEntity } from "../entitymanager";
+import { renderMap, mapWidth, mapHeight } from "../mapmanager";
 import { renderHUD } from "./hud";
 
 const backgroundImage = new Image();

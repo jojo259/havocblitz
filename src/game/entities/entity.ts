@@ -1,4 +1,4 @@
-import { drawImageRelativeCircular } from "../renderer";
+import { drawImageRelativeCircular } from "../render/renderingmanager";
 import { mapWidth, mapHeight, tileMap } from "../mapmanager";
 
 export abstract class Entity {

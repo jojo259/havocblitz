@@ -1,6 +1,6 @@
-import { entityList, clientPlayerEntity } from "./entitymanager";
-import { Player } from "./entities/player";
-import { canvasElem, canvasContext } from "../page/canvas";
+import { entityList, clientPlayerEntity } from "../entitymanager";
+import { Player } from "../entities/player";
+import { canvasElem, canvasContext } from "../../page/canvas";
 
 const playerMarkerLineStartOffset = canvasElem.width / 32;
 const playerMarkerLineLength = canvasElem.width / 32;
