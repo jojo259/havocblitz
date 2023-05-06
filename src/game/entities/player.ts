@@ -15,7 +15,7 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.2, 1, 0.95, "game/sprites/player.png");
+		super(posX, posY, 0.2, 1, 0.95, "./game/sprites/player.png");
 		this.id = id;
 		this.setTeam();
 	}
@@ -49,15 +49,15 @@ export class Player extends PhysicsEntity {
 		let pureID = +this.id.replace(/\D/g, "");
 		if (pureID % 2 == 0){
 			team = "red";
-			newSpriteSrc = "game/sprites/playerred.png";
+			newSpriteSrc = "./game/sprites/playerred.png";
 		}
 		else if (pureID % 2 == 1){
 			team = "blue";
-			newSpriteSrc = "game/sprites/playerblue.png";
+			newSpriteSrc = "./game/sprites/playerblue.png";
 		}
 		else{
 			team = "NaN";
-			newSpriteSrc = "game/sprites/player.png";
+			newSpriteSrc = "./game/sprites/player.png";
 		}
 		console.log("set player team to " + team);
 		this.sprite.src = newSpriteSrc;
