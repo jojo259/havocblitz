@@ -8,7 +8,7 @@ export class PhysicsEntity extends Entity {
 	maximumVelocityX: number;
 	maximumVelocityY: number;
 	canJump = false;
-	canWallJump = false;
+	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
 
 	constructor(
 		posX: number,
@@ -31,10 +31,12 @@ export class PhysicsEntity extends Entity {
 	};
 
 	doMovement() {
-		this.canWallJump = false;
-
 		this.velocityX *= 0.8;
 		this.velocityY += 0.01;
+
+		if (!this.positionWouldBeInsideTile(this.posX + Math.sign(this.canWallJumpOnSide), this.posY)) {
+			this.canWallJumpOnSide = 0;
+		}
 
 		if (Math.abs(this.velocityX) < 0.00001) {
 			this.velocityX = 0;
@@ -50,8 +52,8 @@ export class PhysicsEntity extends Entity {
 			if (Math.abs(this.velocityX) > 0) {
 				this.posX = Math.round(this.posX + this.velocityX) - Math.sign(this.velocityX) * this.diameter / 2 - Math.sign(this.velocityX) * 0.01;
 			}
-			if (this.velocityY > 0.1 && Math.abs(this.velocityX) > 0.1) { // hitting the side of a tile while falling
-				this.canWallJump = true;
+			if (this.velocityY > 0 && Math.abs(this.velocityX) > 0.1) { // hitting the side of a tile while falling
+				this.canWallJumpOnSide = Math.sign(this.velocityX);
 			}
 			this.velocityX = 0;
 		}

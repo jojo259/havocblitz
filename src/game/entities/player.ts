@@ -1,12 +1,13 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
-import { keyState } from "../keytracker";
+import { keyState, keyPresses } from "../keytracker";
 import { drawTextRelative } from "../renderer";
+
+let playerSpeedX = 0.1;
 
 export class Player extends PhysicsEntity {
 
 	id: string;
-	playerSpeedX = 0.1;
 	lastPositionEventTimestamp = 0;
 	team: string = "null";
 
@@ -23,19 +24,19 @@ export class Player extends PhysicsEntity {
 	tick(): void {
 		if (this == clientPlayerEntity) {
 			super.tick();
-			if (keyState["w"] && (this.canJump || this.canWallJump)) {
+			if (keyPresses["w"] && (this.canJump || Math.abs(this.canWallJumpOnSide) == 1)) {
 				this.velocityY = -0.4;
 				this.canJump = false;
-				this.canWallJump = false;
+				this.canWallJumpOnSide = 0;
 			}
 			if (keyState["s"]) {
 				this.velocityY += 0.1;
 			}
 			if (keyState["a"]) {
-				this.velocityX -= this.playerSpeedX;
+				this.velocityX -= playerSpeedX;
 			}
 			if (keyState["d"]) {
-				this.velocityX += this.playerSpeedX;
+				this.velocityX += playerSpeedX;
 			}
 		}
 	}

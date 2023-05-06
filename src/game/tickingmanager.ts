@@ -2,6 +2,7 @@ import { doEntityTicks, clientPlayerEntity } from "./entitymanager";
 import { Event } from "./events/event";
 import { PlayerPosition } from "./events/playerposition";
 import { sendData } from "../net/peermanager";
+import { resetKeyPresses } from "./keytracker";
 
 interface QueuedEvents extends Array<Event> {
 	[index: number]: Event;
@@ -13,6 +14,7 @@ export function doGameTick() {
 	doEntityTicks();
 	queueEvent(new PlayerPosition(clientPlayerEntity.posX, clientPlayerEntity.posY));
 	sendEvents();
+	resetKeyPresses();
 }
 
 export function sendEvents() {
