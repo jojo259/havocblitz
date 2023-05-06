@@ -2,6 +2,7 @@ import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPresses } from "../keytracker";
 import { drawTextRelative } from "../render/renderingmanager";
+import { spawnParticlesAtPoint } from "../render/particlespawner";
 
 let playerSpeedX = 0.1;
 
@@ -28,6 +29,7 @@ export class Player extends PhysicsEntity {
 				this.velocityY = -0.4;
 				this.canJump = false;
 				this.canWallJumpOnSide = 0;
+				spawnParticlesAtPoint(this.posX, this.posY, 32, 0.1, 0.5, 100, ["#aaa", "#ccc", "#fff"]);
 			}
 			if (keyState["s"]) {
 				this.velocityY += 0.1;

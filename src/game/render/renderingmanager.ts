@@ -36,6 +36,13 @@ export function drawTextRelative(content: string, color: string, drawX: number, 
 	canvasContext.fillText(content, getRelativeX(drawX), getRelativeY(drawY));
 }
 
+export function drawCircleRelative(x: number, y: number, diameter: number, color: string) {
+	canvasContext.fillStyle = color;
+	canvasContext.beginPath();
+	canvasContext.arc(getRelativeX(x), getRelativeY(y), diameter, 0, 2 * Math.PI);
+	canvasContext.fill();
+}
+
 function getRelativeX(x: number): number {
 	return (x - clientPlayerEntity.posX + renderScaleX / 2) * canvasScale;
 }

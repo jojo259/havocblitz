@@ -1,8 +1,8 @@
-import { Entity } from "./entity";
+import { SpriteEntity } from "./spriteentity";
 import { tileMap, getTileValue } from "../mapmanager";
 import { drawImageRelative } from "../render/renderingmanager";
 
-export class PhysicsEntity extends Entity {
+export class PhysicsEntity extends SpriteEntity {
 	velocityX: number;
 	velocityY: number;
 	maximumVelocityX: number;

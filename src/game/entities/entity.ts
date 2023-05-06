@@ -1,31 +1,29 @@
-import { drawImageRelativeCircular } from "../render/renderingmanager";
 import { mapWidth, mapHeight, tileMap } from "../mapmanager";
+import { entityList } from "../entitymanager";
 
 export abstract class Entity {
 	posX: number;
 	posY: number;
 	diameter: number;
-	sprite: HTMLImageElement;
 	initializedAt = Date.now();
 
 	constructor(
 		posX: number,
 		posY: number,
 		diameter: number,
-		spriteSrc: string
 	) {
 		this.posX = posX;
 		this.posY = posY;
 		this.diameter = diameter;
-		this.sprite = new Image();
-		this.sprite.src = spriteSrc;
 	}
 
-	draw() {
-		drawImageRelativeCircular(this.sprite, this.posX, this.posY, this.diameter);
-	}
+	abstract draw(): void;
 
 	abstract tick(): void;
+
+	destroy() {
+		entityList.splice(entityList.indexOf(this), 1);
+	}
 
 	findSpawn(): void {
 		while(true){
