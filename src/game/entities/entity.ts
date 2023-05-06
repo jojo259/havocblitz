@@ -19,10 +19,6 @@ export abstract class Entity {
 		this.diameter = diameter;
 		this.sprite = new Image();
 		this.sprite.src = spriteSrc;
-		if (diameter > 1) {
-			console.error("entity diameter above 1 breaks collision logic");
-			this.diameter = 1;
-		}
 	}
 
 	draw() {

@@ -18,6 +18,10 @@ export class PhysicsEntity extends Entity {
 		diameter: number,
 		spriteSrc: string,
 	) {
+		if (diameter > 1) {
+			console.error("entity diameter above 1 breaks collision logic");
+			diameter = 1;
+		}
 		super(posX, posY, diameter, spriteSrc);
 		this.velocityX = 0;
 		this.velocityY = 0;
