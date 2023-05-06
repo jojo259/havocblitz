@@ -52,7 +52,7 @@ export class PhysicsEntity extends Entity {
 			if (Math.abs(this.velocityX) > 0) {
 				this.posX = Math.round(this.posX + this.velocityX) - Math.sign(this.velocityX) * this.diameter / 2 - Math.sign(this.velocityX) * 0.01;
 			}
-			if (this.velocityY > 0 && Math.abs(this.velocityX) > 0.1) { // hitting the side of a tile while falling
+			if (this.velocityY > 0.1 && Math.abs(this.velocityX) > 0.1) { // hitting the side of a tile while falling
 				this.canWallJumpOnSide = Math.sign(this.velocityX);
 			}
 			this.velocityX = 0;
