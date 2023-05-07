@@ -35,7 +35,6 @@ export class PhysicsEntity extends SpriteEntity {
 	};
 
 	doMovement() {
-		this.velocityX *= 0.8;
 		this.velocityY += 0.01;
 
 		if (!this.positionWouldBeInsideTile(this.posX + Math.sign(this.canWallJumpOnSide), this.posY)) {
