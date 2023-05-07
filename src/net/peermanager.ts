@@ -67,6 +67,9 @@ export function getRandomPeerId(): string {
 }
 
 export function sendData(dataStr: string){
+	if (dataStr.length > 1000) {
+		console.warn("sending large packet with length: " + dataStr.length);
+	}
 	for (const [peerId, conn] of Object.entries(peerConnections)) {
 		conn.send(dataStr);
 	}
