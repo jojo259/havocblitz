@@ -5,6 +5,7 @@ import { drawTextRelative } from "../render/renderingmanager";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerPosition } from "../events/playerposition";
+import { PlayerJump } from "../events/playerjump";
 
 let playerSpeedX = 0.1;
 
@@ -28,10 +29,7 @@ export class Player extends PhysicsEntity {
 		if (this == clientPlayerEntity) {
 			super.tick();
 			if (keyPresses["w"] && (this.canJump || Math.abs(this.canWallJumpOnSide) == 1)) {
-				this.velocityY = -0.4;
-				this.canJump = false;
-				this.canWallJumpOnSide = 0;
-				spawnParticlesAtPoint(this.posX, this.posY, 32, 0.1, 0.5, 100, ["#aaa", "#ccc", "#fff"]);
+				this.jump();
 			}
 			if (keyState["s"]) {
 				this.velocityY += 0.1;
@@ -49,6 +47,16 @@ export class Player extends PhysicsEntity {
 	draw(): void {
 		super.draw();
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
+	}
+
+	jump() {
+		this.velocityY = -0.4;
+		this.canJump = false;
+		this.canWallJumpOnSide = 0;
+		spawnParticlesAtPoint(this.posX, this.posY + 0.5, 32, 0.1, 0.5, 100, ["#aaa", "#ccc", "#fff"]);
+		if (this == clientPlayerEntity) {
+			queueEvent(new PlayerJump());
+		}
 	}
 
 	setTeam() {
