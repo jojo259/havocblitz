@@ -15,6 +15,14 @@ export function addListeners() {
 	window.addEventListener("keyup", (event) => {
 		keyUp(event.key);
 	});
+
+	window.addEventListener("mousedown", function(event) {
+		keyDown("mouse" + event.button);
+	});
+
+	window.addEventListener("mouseup", function(event) {
+		keyUp("mouse" + event.button);
+	});
 }
 
 function keyDown(key: string) {
