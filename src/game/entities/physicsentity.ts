@@ -52,6 +52,21 @@ export class PhysicsEntity extends SpriteEntity {
 		this.velocityY = Math.sign(this.velocityY) * Math.min(Math.abs(this.velocityY), this.maximumVelocityY);
 
 		if (this.positionWouldBeInsideTile(this.posX + this.velocityX, this.posY)) {
+			this.collide(true, false);
+		}
+		else {
+			this.posX += this.velocityX;
+		}
+		if (this.positionWouldBeInsideTile(this.posX, this.posY + this.velocityY)) {
+			this.collide(false, true);
+		}
+		else {
+			this.posY += this.velocityY;
+		}
+	}
+
+	collide(horizontal: boolean, vertical: boolean) {
+		if (horizontal) {
 			if (Math.abs(this.velocityX) > 0) {
 				this.posX = Math.round(this.posX + this.velocityX) - Math.sign(this.velocityX) * this.diameter / 2 - Math.sign(this.velocityX) * 0.01;
 			}
@@ -61,9 +76,6 @@ export class PhysicsEntity extends SpriteEntity {
 			this.velocityX = 0;
 		}
 		else {
-			this.posX += this.velocityX;
-		}
-		if (this.positionWouldBeInsideTile(this.posX, this.posY + this.velocityY)) {
 			if (Math.abs(this.velocityY) > 0) {
 				this.posY = Math.round(this.posY + this.velocityY) - Math.sign(this.velocityY) * this.diameter / 2 - Math.sign(this.velocityY) * 0.01;
 			}
@@ -71,9 +83,6 @@ export class PhysicsEntity extends SpriteEntity {
 				this.canJump = true;
 			}
 			this.velocityY = 0;
-		}
-		else {
-			this.posY += this.velocityY;
 		}
 	}
 

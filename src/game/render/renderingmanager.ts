@@ -21,8 +21,28 @@ function renderBackground() {
 	canvasContext.drawImage(backgroundImage, clientPlayerEntity.posX / mapWidth * canvasElem.width * -1, clientPlayerEntity.posY / mapHeight * canvasElem.height * -1, canvasElem.width * 2, canvasElem.height * 2);
 }
 
+export function drawImageRelativeCircularRotated(image: CanvasImageSource, drawX: number, drawY: number, drawDiameter: number, rotatedDegrees: number) {
+	canvasContext.save();
+
+	const centerX = getRelativeX(drawX)
+	const centerY = getRelativeY(drawY)
+	canvasContext.translate(centerX, centerY);
+
+	const radians = (rotatedDegrees * Math.PI) / 180;
+	canvasContext.rotate(radians);
+	canvasContext.drawImage(
+		image,
+		- (drawDiameter * canvasScale) / 2,
+		- (drawDiameter * canvasScale) / 2,
+		drawDiameter * canvasScale,
+		drawDiameter * canvasScale
+	);
+
+	canvasContext.restore();
+}
+
 export function drawImageRelativeCircular(image: CanvasImageSource, drawX: number, drawY: number, drawDiameter: number) {
-	drawImageRelative(image, drawX - drawDiameter / 2, drawY - drawDiameter / 2, drawDiameter, drawDiameter)
+	drawImageRelative(image, drawX - drawDiameter / 2, drawY - drawDiameter / 2, drawDiameter, drawDiameter);
 }
 
 export function drawImageRelative(image: CanvasImageSource, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number) {
