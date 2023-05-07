@@ -1,7 +1,7 @@
 import { doEntityTicks, clientPlayerEntity } from "./entitymanager";
 import { Event } from "./events/event";
 import { sendData } from "../net/peermanager";
-import { resetKeyPresses } from "./keytracker";
+import { resetKeyPressed } from "./inputtracker";
 
 interface QueuedEvents extends Array<Event> {
 	[index: number]: Event;
@@ -12,7 +12,7 @@ let queuedEvents: QueuedEvents = [];
 export function doGameTick() {
 	doEntityTicks();
 	sendEvents();
-	resetKeyPresses();
+	resetKeyPressed();
 }
 
 export function sendEvents() {

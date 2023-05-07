@@ -1,6 +1,6 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
-import { keyState, keyPresses } from "../keytracker";
+import { keyState, keyPressed } from "../inputtracker";
 import { drawTextRelative } from "../render/renderingmanager";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
@@ -28,7 +28,7 @@ export class Player extends PhysicsEntity {
 	tick(): void {
 		if (this == clientPlayerEntity) {
 			super.tick();
-			if (keyPresses["w"] && (this.canJump || Math.abs(this.canWallJumpOnSide) == 1)) {
+			if (keyPressed["w"] && (this.canJump || Math.abs(this.canWallJumpOnSide) == 1)) {
 				this.jump();
 			}
 			if (keyState["s"]) {
