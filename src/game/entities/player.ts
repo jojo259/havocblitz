@@ -3,6 +3,8 @@ import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPresses } from "../keytracker";
 import { drawTextRelative } from "../render/renderingmanager";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
+import { queueEvent } from "../tickingmanager";
+import { PlayerPosition } from "../events/playerposition";
 
 let playerSpeedX = 0.1;
 
@@ -40,6 +42,7 @@ export class Player extends PhysicsEntity {
 			if (keyState["d"]) {
 				this.velocityX += playerSpeedX;
 			}
+			queueEvent(new PlayerPosition(clientPlayerEntity.posX, clientPlayerEntity.posY));
 		}
 	}
 
