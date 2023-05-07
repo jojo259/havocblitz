@@ -1,5 +1,9 @@
+import { canvasElem, canvasScale, renderScaleX, renderScaleY } from "../page/canvas";
+import { clientPlayerEntity } from "./entitymanager";
+
 export let keyState: { [key: string]: boolean } = {};
 export let keyPressed: { [key: string]: boolean } = {};
+export let mousePos: { [key: string]: number } = {x: 0, y: 0};
 
 export function resetKeyPressed() {
 	for (const key in keyPressed) {
@@ -22,6 +26,13 @@ export function addListeners() {
 
 	window.addEventListener("mouseup", function(event) {
 		keyUp("mouse" + event.button);
+	});
+
+	window.addEventListener("mousemove", function(event) {
+		let canvasRect = canvasElem.getBoundingClientRect();
+		let mousePosRelativeX = (event.clientX - canvasRect.left) / canvasScale + clientPlayerEntity.posX - renderScaleX / 2;
+		let mousePosRelativeY = (event.clientY - canvasRect.top) / canvasScale + clientPlayerEntity.posY - renderScaleY / 2;
+		mousePos = {x: mousePosRelativeX, y: mousePosRelativeY}
 	});
 }
 
