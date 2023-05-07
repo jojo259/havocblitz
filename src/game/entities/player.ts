@@ -53,7 +53,7 @@ export class Player extends PhysicsEntity {
 		this.velocityY = -0.4;
 		this.canJump = false;
 		this.canWallJumpOnSide = 0;
-		spawnParticlesAtPoint(this.posX, this.posY + 0.5, 32, 0.1, 0.5, 100, ["#aaa", "#ccc", "#fff"]);
+		spawnParticlesAtPoint(this.posX, this.posY + 0.5, 32, 0.1, 0.5, 0.1, 0.5, 200, ["#aaa", "#ccc", "#fff"]);
 		if (this == clientPlayerEntity) {
 			queueEvent(new PlayerJump());
 		}

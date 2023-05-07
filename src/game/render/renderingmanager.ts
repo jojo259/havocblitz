@@ -39,7 +39,7 @@ export function drawTextRelative(content: string, color: string, drawX: number, 
 export function drawCircleRelative(x: number, y: number, diameter: number, color: string) {
 	canvasContext.fillStyle = color;
 	canvasContext.beginPath();
-	canvasContext.arc(getRelativeX(x), getRelativeY(y), diameter, 0, 2 * Math.PI);
+	canvasContext.arc(getRelativeX(x), getRelativeY(y), diameter / 2 * canvasScale, 0, 2 * Math.PI);
 	canvasContext.fill();
 }
 

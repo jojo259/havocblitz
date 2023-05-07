@@ -33,6 +33,6 @@ export class Particle extends Entity {
 	}
 
 	draw() {
-		drawCircleRelative(this.posX, this.posY, 8, this.color);
+		drawCircleRelative(this.posX, this.posY, this.diameter, this.color);
 	}
 }
