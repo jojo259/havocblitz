@@ -2,6 +2,8 @@ import { Event } from "./events/event";
 import { PlayerPosition } from "./events/playerposition";
 import { MapSend } from "./events/mapsend";
 import { PlayerJump } from "./events/playerjump";
+import { LatencyCheckPing } from "./events/latencycheckping";
+import { LatencyCheckPong } from "./events/latencycheckpong";
 
 export function processReceivedEvents(receivedEvents: any[]): void {
 	for (const eventJSON of receivedEvents) {
@@ -16,6 +18,12 @@ export function processReceivedEvents(receivedEvents: any[]): void {
 				break;
 			case "PlayerJump":
 				PlayerJump.doEvent(eventJSON);
+				break;
+			case "LatencyCheckPing":
+				LatencyCheckPing.doEvent(eventJSON);
+				break;
+			case "LatencyCheckPong":
+				LatencyCheckPong.doEvent(eventJSON);
 				break;
 			default:
 				console.log("unknown event type: " + eventType)

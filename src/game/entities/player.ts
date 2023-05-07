@@ -6,6 +6,7 @@ import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerPosition } from "../events/playerposition";
 import { PlayerJump } from "../events/playerjump";
+import { toggleNetGraph } from "../render/hud";
 
 let playerSpeedX = 0.1;
 
@@ -39,6 +40,9 @@ export class Player extends PhysicsEntity {
 			}
 			if (keyState["d"]) {
 				this.velocityX += playerSpeedX;
+			}
+			if (keyPressed["l"]) {
+				toggleNetGraph();
 			}
 			queueEvent(new PlayerPosition(clientPlayerEntity.posX, clientPlayerEntity.posY));
 		}

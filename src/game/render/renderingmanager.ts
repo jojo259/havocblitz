@@ -29,11 +29,15 @@ export function drawImageRelative(image: CanvasImageSource, drawX: number, drawY
 	canvasContext.drawImage(image, getRelativeX(drawX), getRelativeY(drawY), drawSizeX * canvasScale, drawSizeY * canvasScale);
 }
 
-export function drawTextRelative(content: string, color: string, drawX: number, drawY: number) {
+export function drawText(content: string, color: string, drawX: number, drawY: number) {
 	canvasContext.font = "16px Arial";
 	canvasContext.fillStyle = color;
 	canvasContext.textAlign = "center";
-	canvasContext.fillText(content, getRelativeX(drawX), getRelativeY(drawY));
+	canvasContext.fillText(content, drawX, drawY);
+}
+
+export function drawTextRelative(content: string, color: string, drawX: number, drawY: number) {
+	drawText(content, color, getRelativeX(drawX), getRelativeY(drawY));
 }
 
 export function drawCircleRelative(x: number, y: number, diameter: number, color: string) {
@@ -41,6 +45,15 @@ export function drawCircleRelative(x: number, y: number, diameter: number, color
 	canvasContext.beginPath();
 	canvasContext.arc(getRelativeX(x), getRelativeY(y), diameter / 2 * canvasScale, 0, 2 * Math.PI);
 	canvasContext.fill();
+}
+
+export function drawLine(startX: number, startY: number, endX: number, endY: number, width: number, color: string) {
+	canvasContext.beginPath();
+	canvasContext.moveTo(startX, startY);
+	canvasContext.lineTo(endX, endY);
+	canvasContext.lineWidth = width;
+	canvasContext.strokeStyle = color;
+	canvasContext.stroke();
 }
 
 function getRelativeX(x: number): number {
