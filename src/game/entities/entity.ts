@@ -26,29 +26,29 @@ export abstract class Entity {
 	}
 
 	findSpawn(): void {
-		while(true){
-			let wallFound = false
-			let newPosX = Math.floor(Math.random() * mapWidth);
-			let newPosY = Math.floor(Math.random() * mapHeight);
-			while((newPosX == (0 || mapWidth)) || (newPosY == (0 || mapHeight))){
+		for (let i = 0; i < 8192; i++) {
+			let newPosX = 0;
+			let newPosY = 0;
+			while(newPosX == 0 || newPosX == mapWidth || newPosY == 0 || newPosY == mapHeight){
 				newPosX = Math.floor(Math.random() * mapWidth);
 				newPosY = Math.floor(Math.random() * mapHeight);
 			}
-			for(let x = newPosX-1; x < newPosX+2; x++){
-				for(let y = newPosY-1; y < newPosY+1; y++){
-					if(tileMap[y][x] == 1){
+			let wallFound = false;
+			for(let x = newPosX-1; x <= newPosX+1; x++){
+				for(let y = newPosY-1; y <= newPosY+1; y++){
+					if(tileMap[y][x] != 0){
 						wallFound = true;
 					}
 				}
 			}
-			if(wallFound){
+			if (wallFound) {
 				continue;
 			}
-			else{
-				this.posX = newPosX;
-				this.posY = newPosY;
-				return;
-			}
+			this.posX = newPosX;
+			this.posY = newPosY;
+			console.log("found spawn");
+			return;
 		}
+		console.warn("failed to find spawn");
 	}
 }
