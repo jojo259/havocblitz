@@ -32,8 +32,10 @@ export class Player extends PhysicsEntity {
 		if (this == clientPlayerEntity) {
 			this.velocityX *= 0.8;
 			super.tick();
-			if (keyPressed["w"] && (this.canJump || Math.abs(this.canWallJumpOnSide) == 1)) {
-				this.jump();
+			if (keyPressed["w"] || keyPressed[" "]) {
+				if (this.canJump || Math.abs(this.canWallJumpOnSide) == 1) {
+					this.jump();
+				}
 			}
 			if (keyState["s"]) {
 				this.velocityY += 0.1;
