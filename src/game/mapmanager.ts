@@ -8,6 +8,11 @@ let mapDensity = 40; //Change for more or less density (ranges from 1-100)
 let genAmount = 2; //how many cycles to generate
 export let mapWidth = 300;
 export let mapHeight = 200;
+export let currentMapGeneratedTimestamp = Date.now();
+
+export function setCurrentMapGeneratedTimestamp(to: number) {
+	currentMapGeneratedTimestamp = to;
+}
 
 export function renderMap() {
 	let startX = Math.floor(Math.max(0, clientPlayerEntity.posX - renderScaleX / 2));
