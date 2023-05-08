@@ -7,3 +7,7 @@ body {
 	display: block;
 	background: #222;
 }
+
+* {
+	cursor: url('/game/sprites/cursor.png') 16 16, auto;
+}
