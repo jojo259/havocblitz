@@ -5,16 +5,12 @@ import { drawImageRelative } from "../render/renderingmanager";
 export class PhysicsEntity extends SpriteEntity {
 	velocityX: number;
 	velocityY: number;
-	maximumVelocityX: number;
-	maximumVelocityY: number;
 	canJump = false;
 	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
 
 	constructor(
 		posX: number,
 		posY: number,
-		maximumVelocityX: number,
-		maximumVelocityY: number,
 		diameter: number,
 		spriteSrc: string,
 	) {
@@ -25,8 +21,6 @@ export class PhysicsEntity extends SpriteEntity {
 		super(posX, posY, diameter, spriteSrc);
 		this.velocityX = 0;
 		this.velocityY = 0;
-		this.maximumVelocityX = maximumVelocityX;
-		this.maximumVelocityY = maximumVelocityY;
 	}
 
 	tick(): void {
@@ -47,9 +41,6 @@ export class PhysicsEntity extends SpriteEntity {
 		if (Math.abs(this.velocityY) < 0.00001) {
 			this.velocityY = 0;
 		}
-
-		this.velocityX = Math.sign(this.velocityX) * Math.min(Math.abs(this.velocityX), this.maximumVelocityX);
-		this.velocityY = Math.sign(this.velocityY) * Math.min(Math.abs(this.velocityY), this.maximumVelocityY);
 
 		if (this.positionWouldBeInsideTile(this.posX + this.velocityX, this.posY)) {
 			this.collide(true, false);

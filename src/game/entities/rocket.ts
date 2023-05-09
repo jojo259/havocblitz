@@ -7,7 +7,7 @@ export let rocketSpeed = 0.5;
 export class Rocket extends PhysicsEntity {
 
 	constructor(posX: number, posY: number, velocityX: number, velocityY: number) {
-		super(posX, posY, 99, 99, 0.8, "./game/sprites/rocket.png");
+		super(posX, posY, 0.8, "./game/sprites/rocket.png");
 		this.velocityX = velocityX;
 		this.velocityY = velocityY;
 	}

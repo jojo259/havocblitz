@@ -11,6 +11,7 @@ import { PlayerUse } from "../events/playeruse";
 import { Rocket, rocketSpeed } from "./rocket";
 
 let playerSpeedX = 0.1;
+let playerMaximumVelocityX = 0.25;
 
 export class Player extends PhysicsEntity {
 
@@ -23,7 +24,7 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.2, 1, 0.95, "./game/sprites/player.png");
+		super(posX, posY, 0.95, "./game/sprites/player.png");
 		this.id = id;
 		this.setTeam();
 	}
@@ -45,6 +46,9 @@ export class Player extends PhysicsEntity {
 			}
 			if (keyState["d"]) {
 				this.velocityX += playerSpeedX;
+			}
+			if (Math.abs(this.velocityX) > playerMaximumVelocityX) {
+				this.velocityX = Math.sign(this.velocityX) * Math.max(playerMaximumVelocityX, this.velocityX - playerSpeedX);
 			}
 			if (keyPressed["l"]) {
 				toggleNetGraph();
