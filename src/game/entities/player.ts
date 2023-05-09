@@ -18,6 +18,7 @@ export class Player extends PhysicsEntity {
 	id: string;
 	lastUpdateEventTimestamp = 0;
 	team: string = "null";
+	freeFalling = false;
 
 	constructor(
 		id: string,
@@ -31,7 +32,6 @@ export class Player extends PhysicsEntity {
 
 	tick(): void {
 		if (this == clientPlayerEntity) {
-			this.velocityX *= 0.8;
 			super.tick();
 			if (keyPressed["w"] || keyPressed[" "]) {
 				if (this.canJump || Math.abs(this.canWallJumpOnSide) == 1) {
@@ -47,8 +47,11 @@ export class Player extends PhysicsEntity {
 			if (keyState["d"]) {
 				this.velocityX += playerSpeedX;
 			}
-			if (Math.abs(this.velocityX) > playerMaximumVelocityX) {
-				this.velocityX = Math.sign(this.velocityX) * Math.max(playerMaximumVelocityX, this.velocityX - playerSpeedX);
+			if (keyState["w"] || keyState["a"] || keyState["s"] || keyState["d"]) {
+				this.freeFalling = false;
+			}
+			if (!this.freeFalling) {
+				this.limitVelocityX();
 			}
 			if (keyPressed["l"]) {
 				toggleNetGraph();
@@ -59,6 +62,18 @@ export class Player extends PhysicsEntity {
 			}
 			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY));
 		}
+	}
+
+	limitVelocityX() {
+		this.velocityX *= 0.8;
+		if (Math.abs(this.velocityX) > playerMaximumVelocityX) {
+			this.velocityX = Math.sign(this.velocityX) * Math.max(playerMaximumVelocityX, this.velocityX - playerSpeedX);
+		}
+	}
+
+	collide(horizontal: boolean, vertical: boolean) {
+		super.collide(horizontal, vertical);
+		this.freeFalling = false;
 	}
 
 	draw(): void {
