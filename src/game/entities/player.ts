@@ -100,6 +100,12 @@ export class Player extends PhysicsEntity {
 		}
 	}
 
+	outOfBounds() {
+		this.velocityX = 0;
+		this.velocityY = 0;
+		this.findSpawn();
+	}
+
 	setTeam() {
 		let team="", newSpriteSrc="";
 		let pureID = +this.id.replace(/\D/g, "");

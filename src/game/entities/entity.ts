@@ -6,6 +6,7 @@ export abstract class Entity {
 	posY: number;
 	diameter: number;
 	initializedAt = Date.now();
+	mapBoundsAllowedDist = 64;
 
 	constructor(
 		posX: number,
@@ -50,5 +51,15 @@ export abstract class Entity {
 			return;
 		}
 		console.warn("failed to find spawn");
+	}
+
+	checkInMapBounds() {
+		if (this.posX < -this.mapBoundsAllowedDist || this.posX >= tileMap.length + this.mapBoundsAllowedDist || this.posY < -this.mapBoundsAllowedDist || this.posY >= tileMap[0].length + this.mapBoundsAllowedDist) {
+			this.outOfBounds();
+		}
+	}
+
+	outOfBounds() {
+		this.destroy();
 	}
 }

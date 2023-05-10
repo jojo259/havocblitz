@@ -77,25 +77,6 @@ export class PhysicsEntity extends SpriteEntity {
 		}
 	}
 
-	checkInMapBounds() {
-		if (this.posX < 0) {
-			this.posX = 0;
-			this.velocityX = 0;
-		}
-		if (this.posX > tileMap.length) {
-			this.posX = tileMap.length;
-			this.velocityX = 0;
-		}
-		if (this.posY < 0) {
-			this.posY = 0;
-			this.velocityY = 0;
-		}
-		if (this.posY > tileMap[0].length) {
-			this.posY = tileMap[0].length;
-			this.velocityY = 0;
-		}
-	}
-
 	positionWouldBeInsideTile(x: number, y: number): boolean {
 		for (let i = -1; i <= 1; i++) {
 			for (let j = -1; j <= 1; j++) {

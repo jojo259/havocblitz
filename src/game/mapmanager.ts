@@ -29,7 +29,7 @@ export function renderMap() {
 }
 
 export function getTileValue(x: number, y: number): number {
-	return tileMap?.[Math.floor(x)]?.[Math.floor(y)] ?? 1;
+	return tileMap?.[Math.floor(x)]?.[Math.floor(y)] ?? 0;
 }
 
 function generateMap(width: number, height: number): number[][] {
@@ -37,7 +37,7 @@ function generateMap(width: number, height: number): number[][] {
 	for(let i = 0; i < width; i++){
 		mapArray[i] = [];
 		for(let j = 0; j < height; j++){
-			mapArray[i][j] = 1;
+			mapArray[i][j] = 0;
 		}
 	}
 	return generateNoise(mapArray, width, height);
