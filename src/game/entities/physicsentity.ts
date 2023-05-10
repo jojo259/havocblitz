@@ -82,16 +82,16 @@ export class PhysicsEntity extends SpriteEntity {
 			this.posX = 0;
 			this.velocityX = 0;
 		}
-		if (this.posX > tileMap[0].length) {
-			this.posX = tileMap[0].length;
+		if (this.posX > tileMap.length) {
+			this.posX = tileMap.length;
 			this.velocityX = 0;
 		}
 		if (this.posY < 0) {
 			this.posY = 0;
 			this.velocityY = 0;
 		}
-		if (this.posY > tileMap.length) {
-			this.posY = tileMap.length;
+		if (this.posY > tileMap[0].length) {
+			this.posY = tileMap[0].length;
 			this.velocityY = 0;
 		}
 	}

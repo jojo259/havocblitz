@@ -36,7 +36,7 @@ export abstract class Entity {
 			let wallFound = false;
 			for(let x = newPosX-1; x <= newPosX+1; x++){
 				for(let y = newPosY-1; y <= newPosY+1; y++){
-					if(tileMap[y][x] != 0){
+					if(tileMap[x][y] != 0){
 						wallFound = true;
 					}
 				}

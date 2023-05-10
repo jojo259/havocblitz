@@ -17,10 +17,10 @@ export function setCurrentMapGeneratedTimestamp(to: number) {
 export function renderMap() {
 	let startX = Math.floor(Math.max(0, clientPlayerEntity.posX - renderScaleX / 2));
 	let startY = Math.floor(Math.max(0, clientPlayerEntity.posY - renderScaleY / 2));
-	let endX = Math.ceil(Math.min(tileMap[0].length, clientPlayerEntity.posX + renderScaleX / 2)) + 1;
-	let endY = Math.ceil(Math.min(tileMap.length, clientPlayerEntity.posY + renderScaleY / 2)) + 1;
-	for (let [atY, curRow] of tileMap.slice(startY, endY).entries()) {
-		for (let [atX, tileValue] of curRow.slice(startX, endX).entries()) {
+	let endX = Math.ceil(Math.min(tileMap.length, clientPlayerEntity.posX + renderScaleX / 2)) + 1;
+	let endY = Math.ceil(Math.min(tileMap[0].length, clientPlayerEntity.posY + renderScaleY / 2)) + 1;
+	for (let [atX, curRow] of tileMap.slice(startX, endX).entries()) {
+		for (let [atY, tileValue] of curRow.slice(startY, endY).entries()) {
 			if (tileValue == 1) {
 				drawImageRelative(tileImage, atX + startX, atY + startY, 1, 1);
 			}
@@ -29,7 +29,7 @@ export function renderMap() {
 }
 
 export function getTileValue(x: number, y: number): number {
-	return tileMap?.[Math.floor(y)]?.[Math.floor(x)] ?? 1;
+	return tileMap?.[Math.floor(x)]?.[Math.floor(y)] ?? 1;
 }
 
 function generateMap(width: number, height: number): number[][] {
@@ -44,8 +44,8 @@ function generateMap(width: number, height: number): number[][] {
 }
 
 function generateNoise(mapArray: number[][], width: number, height: number): number[][] {
-	for(let i = 1; i < height - 1; i++) {
-		for(let j = 1; j < width - 1; j++) {
+	for(let i = 1; i < width - 1; i++) {
+		for(let j = 1; j < height - 1; j++) {
 			let random = Math.floor(Math.random() * 100);
 			if(random > mapDensity) {
 				mapArray[i][j] = 0;
@@ -72,10 +72,10 @@ function runCellularAutomaton(mapArray: number[][], width: number, height: numbe
 					}
 				}
 				if (neighborWalls > 4) {
-					mapArray[k][j] = 1;
+					mapArray[j][k] = 1;
 				}
 				else {
-					mapArray[k][j] = 0;
+					mapArray[j][k] = 0;
 				}
 			}
 		}
