@@ -9,13 +9,16 @@ type SpriteCacher = {
 let spriteCacher: SpriteCacher = {}
 
 export function getSprite(path: string, color: number[]): Promise<null | HTMLImageElement> {
-	console.log("loading");
+	console.time("checking cache");
 	return spriteCached(path, color).then((cached) => {
+		console.timeEnd("checking cache");
 		if (cached) {
 			console.log("sprite was cached");
 			return cached;
 		}
+		console.time("coloring image");
 		return colorImage(path, color).then((sprite) => {
+			console.timeEnd("coloring image");
 			if (sprite) {
 				console.log("returning loaded sprite");
 				cacheSprite(path, color, sprite);
@@ -84,28 +87,37 @@ function colorImage(src: string, color: number[]): Promise<null | HTMLImageEleme
 
 		console.timeEnd("getting image data");
 
-		console.time("manipulating image");
+		console.time("coloring image array");
 
 		const rgba2DArray: number[][][] = [];
 
+		let index = 0;
 		for (let y = 0; y < canvas.height; y++) {
 			rgba2DArray[y] = [];
 			for (let x = 0; x < canvas.width; x++) {
-				const index = (y * canvas.width + x) * 4;
 				rgba2DArray[y][x] = [
 					imageData.data[index    ] * (color[0] + 1),
 					imageData.data[index + 1] * (color[1] + 1),
 					imageData.data[index + 2] * (color[2] + 1),
 					imageData.data[index + 3]
 				];
+				index += 4;
 			}
 		}
+
+		console.timeEnd("coloring image array");
+
+		console.time("creating second canvas");
 
 		const newCanvas = document.createElement("canvas");
 		const newCtx = newCanvas.getContext("2d")!;
 
 		newCanvas.width = canvas.width;
 		newCanvas.height = canvas.height;
+
+		console.timeEnd("creating second canvas");
+
+		console.time("creating image data");
 
 		for (let y = 0; y < newCanvas.height; y++) {
 			for (let x = 0; x < newCanvas.width; x++) {
@@ -119,9 +131,13 @@ function colorImage(src: string, color: number[]): Promise<null | HTMLImageEleme
 			}
 		}
 
+		console.timeEnd("creating image data");
+
+		console.time("putting image data");
+
 		newCtx.putImageData(imageData, 0, 0);
 
-		console.timeEnd("manipulating image");
+		console.timeEnd("putting image data");
 
 		console.log("returning colored image promise");
 
