@@ -9,6 +9,7 @@ import { PlayerJump } from "../events/playerjump";
 import { toggleNetGraph } from "../render/hud";
 import { PlayerUse } from "../events/playeruse";
 import { Rocket, rocketSpeed } from "./rocket";
+import { CountryCode } from "../events/countrycode";
 
 let playerSpeedX = 0.1;
 let playerMaximumVelocityX = 0.25;
@@ -19,6 +20,8 @@ export class Player extends PhysicsEntity {
 	lastUpdateEventTimestamp = 0;
 	team: string = "null";
 	freeFalling = false;
+	countryCode: string = "null";
+	flagEmoji: string = "";
 
 	constructor(
 		id: string,
@@ -61,6 +64,12 @@ export class Player extends PhysicsEntity {
 				this.useItem(mousePos.x, mousePos.y);
 			}
 			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY));
+			if (this.countryCode == "null" && Math.random() <= 0.01) {
+				this.checkCountryCode();
+			}
+			if (Math.random() <= 0.01) {
+				queueEvent(new CountryCode(this.countryCode));
+			}
 		}
 	}
 
@@ -79,6 +88,7 @@ export class Player extends PhysicsEntity {
 	draw(): void {
 		super.draw();
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
+		drawTextRelative(this.flagEmoji, "black", this.posX, this.posY - 1.2);
 	}
 
 	jump() {
@@ -106,6 +116,23 @@ export class Player extends PhysicsEntity {
 		this.findSpawn();
 	}
 
+	checkCountryCode() {
+		fetch("https://api.bigdatacloud.net/data/reverse-geocode-client", {mode: "cors"})
+			.then(response => response.json())
+			.then(data => {
+				this.setCountryCodeAndFlag(data.countryCode);
+				console.log("checked country code: " + this.countryCode);
+			}
+		);
+	}
+
+	setCountryCodeAndFlag(code: string) {
+		if (this.countryCode != code) {
+			this.countryCode = code;
+			this.flagEmoji = getFlagEmoji(this.countryCode);
+		}
+	}
+
 	setTeam() {
 		let team="", newSpriteSrc="";
 		let pureID = +this.id.replace(/\D/g, "");
@@ -125,4 +152,12 @@ export class Player extends PhysicsEntity {
 		this.sprite.src = newSpriteSrc;
 		this.team = team;
 	}
+}
+
+function getFlagEmoji(countryCode: string) {
+	const codePoints = countryCode
+		.toUpperCase()
+		.split('')
+		.map(char =>  127397 + char.charCodeAt(0));
+	return String.fromCodePoint(...codePoints);
 }

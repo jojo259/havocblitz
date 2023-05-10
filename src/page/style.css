@@ -11,3 +11,8 @@ body {
 * {
 	cursor: url('/game/sprites/cursor.png') 16 16, auto;
 }
+
+@font-face {
+	font-family: 'BabelStoneFlags';
+	src: url('/game/sprites/BabelStoneFlags.ttf') format('truetype');
+}

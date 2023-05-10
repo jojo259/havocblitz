@@ -50,7 +50,7 @@ export function drawImageRelative(image: CanvasImageSource, drawX: number, drawY
 }
 
 export function drawText(content: string, color: string, drawX: number, drawY: number) {
-	canvasContext.font = "16px Arial";
+	canvasContext.font = "16px BabelStoneFlags";
 	canvasContext.fillStyle = color;
 	canvasContext.textAlign = "center";
 	canvasContext.fillText(content, drawX, drawY);
