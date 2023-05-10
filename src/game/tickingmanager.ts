@@ -5,6 +5,7 @@ import { resetKeyPressed } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
 import { drawGame } from "./render/renderingmanager";
 
+export let considerTickingIntervalMs = 1;
 let ticksPerSecond = 64;
 let tickIntervalMs = 1000 / ticksPerSecond;
 let lastTicked = Date.now();
@@ -16,10 +17,18 @@ interface QueuedEvents extends Array<Event> {
 let queuedEvents: QueuedEvents = [];
 
 export function considerTicking() {
-	while (Date.now() > lastTicked + tickIntervalMs) {
+	let sentBehindWarning = false;
+	let lastTickDiffMs = Date.now() - lastTicked;
+	while (lastTickDiffMs > tickIntervalMs) {
+		let ticksBehind = Math.floor((lastTickDiffMs - tickIntervalMs) / tickIntervalMs);
+		if (!sentBehindWarning && ticksBehind > 0) {
+			sentBehindWarning = true;
+			console.warn("ticking behind by " + ticksBehind + " tick(s)");
+		}
 		lastTicked += tickIntervalMs;
 		doGameTick();
 		drawGame();
+		lastTickDiffMs = Date.now() - lastTicked;
 	}
 }
 
