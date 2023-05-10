@@ -13,12 +13,13 @@ export class PhysicsEntity extends SpriteEntity {
 		posY: number,
 		diameter: number,
 		spriteSrc: string,
+		color: number[]
 	) {
 		if (diameter > 1) {
 			console.error("entity diameter above 1 breaks collision logic");
 			diameter = 1;
 		}
-		super(posX, posY, diameter, spriteSrc);
+		super(posX, posY, diameter, spriteSrc, color);
 		this.velocityX = 0;
 		this.velocityY = 0;
 	}

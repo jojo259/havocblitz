@@ -28,7 +28,7 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.95, "./game/sprites/player.png");
+		super(posX, posY, 0.95, "./game/sprites/player.png", [0, 0, 1]);
 		this.id = id;
 		this.setTeam();
 	}
@@ -149,7 +149,7 @@ export class Player extends PhysicsEntity {
 			newSpriteSrc = "./game/sprites/player.png";
 		}
 		console.log("set player team to " + team);
-		this.sprite.src = newSpriteSrc;
+		//this.sprite.src = newSpriteSrc;
 		this.team = team;
 	}
 }
