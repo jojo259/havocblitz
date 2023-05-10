@@ -3,6 +3,11 @@ import { Event } from "./events/event";
 import { sendData } from "../net/peermanager";
 import { resetKeyPressed } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
+import { drawGame } from "./render/renderingmanager";
+
+let ticksPerSecond = 64;
+let tickIntervalMs = 1000 / ticksPerSecond;
+let lastTicked = Date.now();
 
 interface QueuedEvents extends Array<Event> {
 	[index: number]: Event;
@@ -10,7 +15,15 @@ interface QueuedEvents extends Array<Event> {
 
 let queuedEvents: QueuedEvents = [];
 
-export function doGameTick() {
+export function considerTicking() {
+	while (Date.now() > lastTicked + tickIntervalMs) {
+		lastTicked += tickIntervalMs;
+		doGameTick();
+		drawGame();
+	}
+}
+
+function doGameTick() {
 	tickLatencyTracker();
 	doEntityTicks();
 	sendEvents();
