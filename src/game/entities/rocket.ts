@@ -11,8 +11,8 @@ let rocketExplosionEnergy = 0.4;
 
 export class Rocket extends PhysicsEntity {
 
-	constructor(posX: number, posY: number, velocityX: number, velocityY: number) {
-		super(posX, posY, 0.8, "./game/sprites/rocket.png", [Math.random(), Math.random(), Math.random()]);
+	constructor(posX: number, posY: number, velocityX: number, velocityY: number, color: number[]) {
+		super(posX, posY, 0.8, "./game/sprites/rocket.png", color);
 		this.velocityX = velocityX;
 		this.velocityY = velocityY;
 	}

@@ -103,7 +103,7 @@ export class Player extends PhysicsEntity {
 
 	useItem(withMouseX: number, withMouseY: number) {
 		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
-		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed));
+		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
 		if (this == clientPlayerEntity) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
