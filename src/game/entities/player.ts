@@ -80,8 +80,8 @@ export class Player extends PhysicsEntity {
 		}
 	}
 
-	collide(horizontal: boolean, vertical: boolean) {
-		super.collide(horizontal, vertical);
+	collide(collX: number, collY: number, sideX: number, sideY: number) {
+		super.collide(collX, collY, sideX, sideY);
 		this.freeFalling = false;
 	}
 

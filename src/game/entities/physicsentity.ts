@@ -14,10 +14,6 @@ export class PhysicsEntity extends SpriteEntity {
 		diameter: number,
 		spriteSrc: string,
 	) {
-		if (diameter > 1) {
-			console.error("entity diameter above 1 breaks collision logic");
-			diameter = 1;
-		}
 		super(posX, posY, diameter, spriteSrc);
 		this.velocityX = 0;
 		this.velocityY = 0;
@@ -42,38 +38,53 @@ export class PhysicsEntity extends SpriteEntity {
 			this.velocityY = 0;
 		}
 
-		if (this.positionWouldBeInsideTile(this.posX + this.velocityX, this.posY)) {
-			this.collide(true, false);
-		}
-		else {
-			this.posX += this.velocityX;
-		}
-		if (this.positionWouldBeInsideTile(this.posX, this.posY + this.velocityY)) {
-			this.collide(false, true);
-		}
-		else {
-			this.posY += this.velocityY;
+		this.velocityX = Math.min(this.diameter / 2, Math.abs(this.velocityX)) * Math.sign(this.velocityX);
+		this.velocityY = Math.min(this.diameter / 2, Math.abs(this.velocityY)) * Math.sign(this.velocityY);
+
+		this.posX += this.velocityX;
+		this.posY += this.velocityY;
+
+		for (let pass = 0; pass < 2; pass++) { // there is probably a less wasteful solution
+			for (let sideX = -1; sideX <= 1; sideX++) {
+				for (let sideY = -1; sideY <= 1; sideY++) {
+					if (Math.abs(sideX) != Math.abs(sideY)) {
+						let checkX = this.posX + this.diameter / 2 * sideX;
+						let checkY = this.posY + this.diameter / 2 * sideY;
+						if (getTileValue(checkX, checkY) > 0) {
+							let collX = Math.floor(this.posX + this.diameter / 2 * sideX) + (sideX - 1) / -2;
+							let collY = Math.floor(this.posY + this.diameter / 2 * sideY) + (sideY - 1) / -2;
+							if (
+								pass == 1 ||
+								(pass == 0 &&
+									(sideX != 0 && Math.abs(this.velocityX) > Math.abs(this.velocityY) ||
+									 sideY != 0 && Math.abs(this.velocityY) > Math.abs(this.velocityX))
+								)
+							) {
+								this.collide(collX, collY, sideX, sideY);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
-	collide(horizontal: boolean, vertical: boolean) {
-		if (horizontal) {
-			if (Math.abs(this.velocityX) > 0) {
-				this.posX = Math.round(this.posX + this.velocityX) - Math.sign(this.velocityX) * this.diameter / 2 - Math.sign(this.velocityX) * 0.01;
-			}
+	collide(collX: number, collY: number, sideX: number, sideY: number) {
+		if (sideX != 0) {
+			this.posX = collX - sideX * (this.diameter / 2 + 0.001);
 			if (this.velocityY > 0.1 && Math.abs(this.velocityX) > 0.1) { // hitting the side of a tile while falling
 				this.canWallJumpOnSide = Math.sign(this.velocityX);
 			}
 			this.velocityX = 0;
+			//console.log("new this.posX: " + this.posX);
 		}
-		else {
-			if (Math.abs(this.velocityY) > 0) {
-				this.posY = Math.round(this.posY + this.velocityY) - Math.sign(this.velocityY) * this.diameter / 2 - Math.sign(this.velocityY) * 0.01;
-			}
+		else if (sideY != 0) {
+			this.posY = collY - sideY * (this.diameter / 2 + 0.001);
 			if (this.velocityY > 0) { // hitting the top of a tile rather than the bottom
 				this.canJump = true;
 			}
 			this.velocityY = 0;
+			//console.log("new this.posY: " + this.posY);
 		}
 	}
 

@@ -27,7 +27,7 @@ export class Rocket extends PhysicsEntity {
 		spawnParticlesAtPoint(this.posX - this.velocityX, this.posY - this.velocityY, 8, 0.1, 0.5, 0.1, 0.1, 100, ["#f00", "#f90", "#ff0"]);
 	}
 
-	collide(horizontal: boolean, vertical: boolean) {
+	collide(collX: number, collY: number, sideX: number, sideY: number) {
 		this.posX += this.velocityX; // for later bearing calculations in the edge case of blowing up at the exact coordinates of a player
 		this.posY += this.velocityY;
 		spawnParticlesAtPoint(this.posX - this.velocityX, this.posY - this.velocityY, 64, 0.1, 1, 0.5, 0.5, 250, ["#f00", "#f90", "#ff0"]);
