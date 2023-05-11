@@ -1,17 +1,17 @@
 import { canvasScale } from "../../page/canvas";
 
-type SpriteColors = {
+type SpriteColor = {
 	[key: string]: HTMLImageElement;
 }
 
-type SpriteCacher = {
-	[key: string]: SpriteColors;
+type SpriteCache = {
+	[key: string]: SpriteColor;
 }
 
-let spriteCacher: SpriteCacher = {}
+let spriteCache: SpriteCache = {}
 
 export function clearCache() {
-	spriteCacher = {};
+	spriteCache = {};
 }
 
 export function getSprite(path: string, color: number[]): Promise<null | HTMLImageElement> {
@@ -35,16 +35,16 @@ export function getSprite(path: string, color: number[]): Promise<null | HTMLIma
 }
 
 function cacheSprite(path: string, color: number[], sprite: HTMLImageElement) {
-	if (!spriteCacher.hasOwnProperty(path)) {
-		spriteCacher[path] = {};
+	if (!spriteCache.hasOwnProperty(path)) {
+		spriteCache[path] = {};
 	}
-	spriteCacher[path][color.toString()] = sprite;
+	spriteCache[path][color.toString()] = sprite;
 }
 
 function spriteCached(path: string, color: number[]): Promise<null | HTMLImageElement> {
-	if (spriteCacher.hasOwnProperty(path)) {
-		if (spriteCacher[path].hasOwnProperty(color.toString())) {
-			return Promise.resolve(spriteCacher[path][color.toString()]);
+	if (spriteCache.hasOwnProperty(path)) {
+		if (spriteCache[path].hasOwnProperty(color.toString())) {
+			return Promise.resolve(spriteCache[path][color.toString()]);
 		}
 	}
 	return Promise.resolve(null);
