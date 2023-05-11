@@ -40,10 +40,14 @@ function generateMap(width: number, height: number): number[][] {
 			mapArray[i][j] = 0;
 		}
 	}
-	return generateNoise(mapArray, width, height);
+	mapArray = generateNoise(mapArray);
+	mapArray = runCellularAutomaton(mapArray);
+	return mapArray;
 }
 
-function generateNoise(mapArray: number[][], width: number, height: number): number[][] {
+function generateNoise(mapArray: number[][]): number[][] {
+	let width = mapArray.length;
+	let height = mapArray[0].length;
 	for(let i = 1; i < width - 1; i++) {
 		for(let j = 1; j < height - 1; j++) {
 			let random = Math.floor(Math.random() * 100);
@@ -55,10 +59,12 @@ function generateNoise(mapArray: number[][], width: number, height: number): num
 			}
 		}
 	}
-	return runCellularAutomaton(mapArray, width, height);
+	return mapArray;
 }
 
-function runCellularAutomaton(mapArray: number[][], width: number, height: number): number[][] { 
+function runCellularAutomaton(mapArray: number[][]): number[][] {
+	let width = mapArray.length;
+	let height = mapArray[0].length;
 	for (let i = 0; i < genAmount; i++){
 		let tempArray = mapArray.map(inner => inner.slice());
 		for (let j = 1; j < width - 1; j++){
