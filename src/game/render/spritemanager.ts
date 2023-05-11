@@ -8,7 +8,7 @@ type SpriteCache = {
 	[key: string]: SpriteColor;
 }
 
-let spriteCache: SpriteCache = {}
+let spriteCache: SpriteCache = {};
 
 export function clearCache() {
 	spriteCache = {};
@@ -50,11 +50,11 @@ function spriteCached(path: string, color: number[]): Promise<null | HTMLImageEl
 	return Promise.resolve(null);
 }
 
-function loadImage(src: string): Promise<HTMLImageElement> {
+function loadImage(path: string): Promise<HTMLImageElement> {
 	return new Promise((resolve) => {
 		const img = new Image();
 		img.onload = () => resolve(img);
-		img.src = src;
+		img.src = path;
 		return img;
 	});
 }
