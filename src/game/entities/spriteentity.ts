@@ -12,20 +12,16 @@ export class SpriteEntity extends Entity {
 		super(posX, posY, diamater);
 		this.spritePath = spritePath;
 		this.color = color;
-		console.time("loaded sprite");
 		this.loadSprite();
 	}
 
 	loadSprite() {
-		console.log("loading sprite: " + this.spritePath)
 		getSprite(this.spritePath, this.color).then((sprite) => {
 			if (sprite) {
-				console.log("setting sprite");
 				this.sprite = sprite;
-				console.timeEnd("loaded sprite");
 			}
 			else {
-				console.error("sprite was null: " + this.spritePath)
+				console.error("sprite was null for: " + this.spritePath);
 			}
 		})
 	}
