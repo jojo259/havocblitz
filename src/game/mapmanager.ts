@@ -32,7 +32,8 @@ export function renderMap() {
 			}
 			if (tileValue >= 6 && tileValue <= 9) {
 				let rotatedDegrees = 45 + 90 * (tileValue - 6);
-				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, 0, 0.5);
+				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, (Math.sqrt(2) - 1) / 2, 0.5);
+				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, -(Math.sqrt(2) - 1) / 2, 0.5);
 			}
 		}
 	}
