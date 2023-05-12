@@ -49,6 +49,50 @@ export function drawImageRelative(image: CanvasImageSource, drawX: number, drawY
 	canvasContext.drawImage(image, getRelativeX(drawX), getRelativeY(drawY), drawSizeX * canvasScale, drawSizeY * canvasScale);
 }
 
+export function drawImageRelativeRotated(image: CanvasImageSource, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number, rotatedDegrees: number) {
+	canvasContext.save();
+	
+	const centerX = getRelativeX(drawX) + (drawSizeX * canvasScale) / 2;
+	const centerY = getRelativeY(drawY) + (drawSizeY * canvasScale) / 2;
+	canvasContext.translate(centerX, centerY);
+
+	const radians = (rotatedDegrees * Math.PI) / 180;
+	canvasContext.rotate(radians);
+	canvasContext.drawImage(
+		image,
+		- (drawSizeX * canvasScale) / 2,
+		- (drawSizeY * canvasScale) / 2,
+		drawSizeX * canvasScale,
+		drawSizeY * canvasScale
+	);
+
+	canvasContext.restore();
+}
+
+export function drawImageRelativeRotatedTranslated(image: CanvasImageSource, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number, rotatedDegrees: number, translateX: number, translateY: number) {
+	canvasContext.save();
+
+	const centerX = getRelativeX(drawX) + (drawSizeX * canvasScale) / 2;
+	const centerY = getRelativeY(drawY) + (drawSizeY * canvasScale) / 2;
+
+	canvasContext.translate(centerX, centerY);
+
+	const radians = (rotatedDegrees * Math.PI) / 180;
+	canvasContext.rotate(radians);
+
+	canvasContext.translate(translateX * canvasScale, translateY * canvasScale);
+
+	canvasContext.drawImage(
+		image,
+		- (drawSizeX * canvasScale) / 2,
+		- (drawSizeY * canvasScale) / 2,
+		drawSizeX * canvasScale,
+		drawSizeY * canvasScale
+	);
+
+	canvasContext.restore();
+}
+
 export function drawText(content: string, color: string, drawX: number, drawY: number) {
 	canvasContext.font = "16px BabelStoneFlags";
 	canvasContext.fillStyle = color;
