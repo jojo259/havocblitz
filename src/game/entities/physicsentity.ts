@@ -87,17 +87,4 @@ export class PhysicsEntity extends SpriteEntity {
 			//console.log("new this.posY: " + this.posY);
 		}
 	}
-
-	positionWouldBeInsideTile(x: number, y: number): boolean {
-		for (let i = -1; i <= 1; i++) {
-			for (let j = -1; j <= 1; j++) {
-				if (Math.abs(i) == Math.abs(j)) {
-					if (getTileValue(x + i * this.diameter / 2, y + j * this.diameter / 2) > 0) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
 }
