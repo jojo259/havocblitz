@@ -14,6 +14,15 @@ import { CountryCode } from "../events/countrycode";
 let playerSpeedX = 0.1;
 let playerMaximumVelocityX = 0.25;
 
+let playerColors = [
+	[1, 0, 0],
+	[0, 1, 0],
+	[0, 0, 1],
+	[1, 1, 0],
+	[0, 1, 1],
+	[1, 0, 1],
+]
+
 export class Player extends PhysicsEntity {
 
 	id: string;
@@ -28,9 +37,8 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.95, "./game/sprites/player.png", [0, 0, 1]);
+		super(posX, posY, 0.95, "./game/sprites/player.png", getColor(id));
 		this.id = id;
-		//this.setTeam();
 	}
 
 	tick(): void {
@@ -132,26 +140,12 @@ export class Player extends PhysicsEntity {
 			this.flagEmoji = getFlagEmoji(this.countryCode);
 		}
 	}
+}
 
-	setTeam() {
-		let team="", newSpriteSrc="";
-		let pureID = +this.id.replace(/\D/g, "");
-		if (pureID % 2 == 0){
-			team = "red";
-			newSpriteSrc = "./game/sprites/playerred.png";
-		}
-		else if (pureID % 2 == 1){
-			team = "blue";
-			newSpriteSrc = "./game/sprites/playerblue.png";
-		}
-		else{
-			team = "NaN";
-			newSpriteSrc = "./game/sprites/player.png";
-		}
-		console.log("set player team to " + team);
-		//this.sprite.src = newSpriteSrc;
-		this.team = team;
-	}
+function getColor(id: string) {
+	let pureID = +id.replace(/\D/g, "");
+	let color = playerColors[pureID % playerColors.length];
+	return color;
 }
 
 function getFlagEmoji(countryCode: string) {
