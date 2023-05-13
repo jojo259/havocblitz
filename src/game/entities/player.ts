@@ -28,9 +28,9 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.95, "./game/sprites/player.png");
+		super(posX, posY, 0.95, "./game/sprites/player.png", [0, 0, 1]);
 		this.id = id;
-		this.setTeam();
+		//this.setTeam();
 	}
 
 	tick(): void {
@@ -103,7 +103,7 @@ export class Player extends PhysicsEntity {
 
 	useItem(withMouseX: number, withMouseY: number) {
 		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
-		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed));
+		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
 		if (this == clientPlayerEntity) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
@@ -149,7 +149,7 @@ export class Player extends PhysicsEntity {
 			newSpriteSrc = "./game/sprites/player.png";
 		}
 		console.log("set player team to " + team);
-		this.sprite.src = newSpriteSrc;
+		//this.sprite.src = newSpriteSrc;
 		this.team = team;
 	}
 }

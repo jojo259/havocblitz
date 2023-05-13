@@ -1,14 +1,29 @@
 import { Entity } from "./entity";
 import { drawImageRelativeCircular } from "../render/renderingmanager";
+import { getSprite } from "../render/spritemanager";
 
 export class SpriteEntity extends Entity {
 
-	sprite: HTMLImageElement;
+	sprite: HTMLImageElement | null = null;
+	color: number[] = [0, 0, 0];
+	spritePath: string;
 
-	constructor(posX: number, posY: number, diamater: number, spriteSrc: string) {
+	constructor(posX: number, posY: number, diamater: number, spritePath: string, color: number[]) {
 		super(posX, posY, diamater);
-		this.sprite = new Image();
-		this.sprite.src = spriteSrc;
+		this.spritePath = spritePath;
+		this.color = color;
+		this.loadSprite();
+	}
+
+	loadSprite() {
+		getSprite(this.spritePath, this.color).then((sprite) => {
+			if (sprite) {
+				this.sprite = sprite;
+			}
+			else {
+				console.error("sprite was null for: " + this.spritePath + " with color " + this.color.toString());
+			}
+		})
 	}
 
 	tick() {
@@ -16,6 +31,8 @@ export class SpriteEntity extends Entity {
 	}
 
 	draw() {
-		drawImageRelativeCircular(this.sprite, this.posX, this.posY, this.diameter);
+		if (this.sprite instanceof HTMLImageElement) {
+			drawImageRelativeCircular(this.sprite, this.posX, this.posY, this.diameter);
+		}
 	}
 }
