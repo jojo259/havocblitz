@@ -1,7 +1,7 @@
 export const canvasElem = document.getElementById("gamecanvas") as HTMLCanvasElement;
 export const canvasContext = canvasElem.getContext("2d")!;
 
-let queueCanvasResizeCountdownTimeMs = 100;
+export let queueCanvasResizeCountdownTimeMs = 100;
 let queueCanvasResizeTimeoutId: string;
 
 export let canvasScale = 0;

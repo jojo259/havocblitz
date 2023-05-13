@@ -68,6 +68,7 @@ function colorImage(src: string, color: number[]): Promise<null | HTMLImageEleme
 		let maximumDimensionPixels = canvasScale;
 
 		let loadScale = maximumDimensionPixels / Math.min(sprite.width, sprite.height);
+		loadScale = Math.max(loadScale, 0.1);
 
 		canvas.width = sprite.width * loadScale;
 		canvas.height = sprite.height * loadScale;

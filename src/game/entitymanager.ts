@@ -4,6 +4,7 @@ import { clientPeerId } from "../net/peermanager";
 import { tileMap, mapWidth, mapHeight} from "./mapmanager";
 import { SpriteEntity } from "./entities/spriteentity";
 import { clearCache } from "./render/spritemanager";
+import { queueCanvasResizeCountdownTimeMs } from "../page/canvas";
 
 export let entityList: Entity[] = [];
 export let clientPlayerEntity: Player;
@@ -39,4 +40,4 @@ export function doEntityTicks() {
 	});
 }
 
-addEventListener("resize", (event) => {reloadSprites()});
+addEventListener("resize", (event) => {setTimeout(() => {reloadSprites()}, queueCanvasResizeCountdownTimeMs + 100)});
