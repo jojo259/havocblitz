@@ -13,7 +13,6 @@ export function incrementRandomPeerNum(){
 export function findRandomPeer(){
 	incrementRandomPeerNum();
 	let randomPeerId = peerIdPrefix + atRandomPeerNum;
-	console.log("attempting to connect to random peer with id " + randomPeerId);
 	console.log("current connections: " + Object.keys(peerConnections).join(", "));
 
 	if (randomPeerId == clientPeerId) {
@@ -22,9 +21,11 @@ export function findRandomPeer(){
 	}
 
 	if (peerConnections.hasOwnProperty(randomPeerId)) {
-		console.log("already connected to this peer");
+		console.log("random peer already connected to, skipping");
 		return;
 	}
+
+	console.log("attempting to connect to random peer with id " + randomPeerId);
 
 	const conn = clientPeer.connect(randomPeerId);
 	ingestPotentialPeerConnection(conn);
