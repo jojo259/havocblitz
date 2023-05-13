@@ -15,15 +15,16 @@ export function clearCache() {
 }
 
 export function getSprite(path: string, color: number[]): Promise<null | HTMLImageElement> {
+	let loadingTime = Date.now()
 	return spriteCached(path, color).then((cached) => {
 		if (cached) {
-			console.log("found cached sprite for: " + path);
+			console.log("found cached sprite in " + (Date.now() - loadingTime) + "ms for: " + path + " with color " + color.toString());
 			return cached;
 		}
 		return colorImage(path, color).then((sprite) => {
 			if (sprite) {
 				cacheSprite(path, color, sprite);
-				console.log("loaded sprite for: " + path);
+				console.log("loaded new sprite in " + (Date.now() - loadingTime) + "ms for: " + path + " with color " + color.toString());
 				return sprite;
 			}
 			else {
