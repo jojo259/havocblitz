@@ -1,11 +1,11 @@
-import { resetCanvasSize } from "./page/canvas";
+import { queueResetCanvasResize } from "./page/canvas";
 import { findRandomPeer } from "./net/peerfinder";
 import { sendData } from "./net/peermanager";
 import { addClientPlayerEntity } from "./game/entitymanager";
 import { considerTicking, considerTickingIntervalMs } from "./game/tickingmanager";
 import { addListeners } from "./game/inputtracker";
 
-resetCanvasSize();
+queueResetCanvasResize();
 
 setInterval(findRandomPeer, 1000);
 
