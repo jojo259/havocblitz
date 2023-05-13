@@ -37,7 +37,7 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.95, "./game/sprites/player.png", getColor(id));
+		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
 	}
 
