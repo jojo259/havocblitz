@@ -4,12 +4,16 @@ import { addNewPlayer } from "../game/entitymanager";
 import { MapSend } from "../game/events/mapsend";
 import { queueEvent } from "../game/tickingmanager";
 import { processReceivedEvents } from "../game/eventingestor";
+import { debugMode } from "../page/debugmode";
 
 export let clientPeerId: string;
 export let clientPeer: Peer;
 
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
+if (debugMode) {
+	maxPeerIdNum = 4;
+}
 
 interface PeerConnections {
 	[peerId: string]: DataConnection;
