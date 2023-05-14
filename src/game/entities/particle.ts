@@ -1,5 +1,5 @@
 import { Entity } from "./entity";
-import { drawCircleRelative } from "../render/renderingmanager";
+import { drawCircleRelative } from "../render/renderingfuncs";
 
 export class Particle extends Entity {
 

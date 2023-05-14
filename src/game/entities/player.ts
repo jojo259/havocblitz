@@ -1,12 +1,12 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity, spawnEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
-import { drawTextRelative } from "../render/renderingmanager";
+import { drawTextRelative } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
 import { PlayerJump } from "../events/playerjump";
-import { toggleNetGraph } from "../render/hud";
+import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { Rocket, rocketSpeed } from "./rocket";
 import { CountryCode } from "../events/countrycode";

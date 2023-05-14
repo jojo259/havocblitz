@@ -1,25 +1,5 @@
-import { Entity } from "../entities/entity";
-import { canvasElem, canvasContext, canvasScale, renderScaleX, renderScaleY } from "../../page/canvas";
-import { entityList, clientPlayerEntity } from "../entitymanager";
-import { renderMap, mapWidth, mapHeight } from "../mapmanager";
-import { renderHUD } from "./hud";
-
-const backgroundImage = new Image();
-backgroundImage.src = "./game/sprites/background.png";
-
-export function drawGame() {
-	clearCanvas();
-	renderBackground();
-	renderMap();
-	entityList.forEach(entity => {
-		entity.draw();
-	});
-	renderHUD();
-}
-
-function renderBackground() {
-	canvasContext.drawImage(backgroundImage, clientPlayerEntity.posX / mapWidth * canvasElem.width * -1, clientPlayerEntity.posY / mapHeight * canvasElem.height * -1, canvasElem.width * 2, canvasElem.height * 2);
-}
+import { canvasContext, canvasScale, renderScaleX, renderScaleY } from "../../page/canvas";
+import { clientPlayerEntity } from "../entitymanager";
 
 export function drawImageRelativeCircularRotated(image: HTMLImageElement, drawX: number, drawY: number, drawDiameter: number, rotatedDegrees: number) {
 	canvasContext.save();
@@ -47,6 +27,10 @@ export function drawImageRelativeCircular(image: HTMLImageElement, drawX: number
 
 export function drawImageRelative(image: HTMLImageElement, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number) {
 	canvasContext.drawImage(image, getRelativeX(drawX), getRelativeY(drawY), drawSizeX * canvasScale, drawSizeY * canvasScale);
+}
+
+export function drawImage(image: HTMLImageElement, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number) {
+	canvasContext.drawImage(image, drawX * canvasScale, drawY * canvasScale, drawSizeX * canvasScale, drawSizeY * canvasScale);
 }
 
 export function drawText(content: string, color: string, drawX: number, drawY: number) {
@@ -84,7 +68,7 @@ function getRelativeY(y: number): number {
 	return (y - clientPlayerEntity.posY + renderScaleY / 2) * canvasScale;
 }
 
-function clearCanvas() {
+export function clearCanvas() {
 	canvasContext.fillStyle = "#044";
 	canvasContext.fillRect(0, 0, 9999, 9999);
 }

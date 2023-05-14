@@ -1,15 +1,33 @@
 import { entityList, clientPlayerEntity } from "../entitymanager";
 import { Player } from "../entities/player";
-import { canvasElem, canvasContext } from "../../page/canvas";
+import { canvasElem, canvasScale, canvasContext } from "../../page/canvas";
 import { peerLatencies } from "../../net/latencytracker";
-import { drawText, drawLine } from "./renderingmanager";
+import { drawText, drawLine, drawImage, clearCanvas, drawImageRelative } from "./renderingfuncs";
+import { renderMap, mapWidth, mapHeight } from "../mapmanager";
 
 let netGraphEnabled = false;
 
 const playerMarkerLineStartOffset = canvasElem.width / 32;
 const playerMarkerLineLength = canvasElem.width / 32;
 
-export function renderHUD() {
+const backgroundImage = new Image();
+backgroundImage.src = "./game/sprites/background.png";
+
+export function renderGame() {
+	clearCanvas();
+	renderBackground();
+	renderMap();
+	entityList.forEach(entity => {
+		entity.draw();
+	});
+	renderHUD();
+}
+
+function renderBackground() {
+	drawImage(backgroundImage, clientPlayerEntity.posX / mapWidth * canvasElem.width * -1 / canvasScale, clientPlayerEntity.posY / mapHeight * canvasElem.height * -1 / canvasScale, canvasElem.width * 2 / canvasScale, canvasElem.height * 2 / canvasScale);
+}
+
+function renderHUD() {
 	renderPlayerMarkers();
 	if (netGraphEnabled) {
 		renderNetGraph();

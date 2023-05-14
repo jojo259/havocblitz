@@ -1,5 +1,5 @@
 import { Entity } from "./entity";
-import { drawImageRelativeCircular } from "../render/renderingmanager";
+import { drawImageRelativeCircular } from "../render/renderingfuncs";
 import { getSprite } from "../render/spritemanager";
 
 export class SpriteEntity extends Entity {

@@ -1,6 +1,6 @@
 import { PhysicsEntity } from "./physicsentity";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
-import { drawImageRelativeCircularRotated } from "../render/renderingmanager";
+import { drawImageRelativeCircularRotated } from "../render/renderingfuncs";
 import { entityList } from "../entitymanager";
 import { getDist, getBearing } from "../util";
 import { Player } from "./player";

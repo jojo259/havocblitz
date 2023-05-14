@@ -3,7 +3,7 @@ import { Event } from "./events/event";
 import { sendData } from "../net/peermanager";
 import { resetKeyPressed } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
-import { drawGame } from "./render/renderingmanager";
+import { renderGame } from "./render/renderer";
 
 export let considerTickingIntervalMs = 1;
 let ticksPerSecond = 64;
@@ -27,7 +27,7 @@ export function considerTicking() {
 		}
 		lastTicked += tickIntervalMs;
 		doGameTick();
-		drawGame();
+		renderGame();
 		lastTickDiffMs = Date.now() - lastTicked;
 	}
 }
