@@ -1,5 +1,5 @@
 import { PhysicsEntity } from "./physicsentity";
-import { clientPlayerEntity, spawnEntity } from "../entitymanager";
+import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
 import { drawTextRelative } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
@@ -8,8 +8,17 @@ import { PlayerUpdate } from "../events/playerupdate";
 import { PlayerJump } from "../events/playerjump";
 import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
-import { Rocket, rocketSpeed } from "./rocket";
 import { CountryCode } from "../events/countrycode";
+import { Item } from "../items/item";
+import { RocketLauncher } from "../items/rocketlauncher";
+
+interface PlayerItems extends Array<Item> {
+	[index: number]: Item;
+}
+
+export let playerItems: PlayerItems = [
+	new RocketLauncher(),
+]
 
 let playerSpeedX = 0.1;
 let playerMaximumVelocityX = 0.25;
@@ -26,6 +35,7 @@ let playerColors = [
 export class Player extends PhysicsEntity {
 
 	id: string;
+	heldItem: number;
 	lastUpdateEventTimestamp = 0;
 	team: string = "null";
 	freeFalling = false;
@@ -39,6 +49,7 @@ export class Player extends PhysicsEntity {
 	) {
 		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
+		this.heldItem = 0;
 	}
 
 	tick(): void {
@@ -110,8 +121,7 @@ export class Player extends PhysicsEntity {
 	}
 
 	useItem(withMouseX: number, withMouseY: number) {
-		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
-		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
+		playerItems[this.heldItem].use(this, mousePos);
 		if (this == clientPlayerEntity) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
