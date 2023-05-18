@@ -6,13 +6,11 @@ import { LatencyCheckPing } from "./events/latencycheckping";
 import { LatencyCheckPong } from "./events/latencycheckpong";
 import { PlayerUse } from "./events/playeruse";
 import { CountryCode } from "./events/countrycode";
+import { peerConnections } from "../net/peermanager";
 
-interface QueuedProcessEvent {
-	eventType: string;
-	json: JSON;
-}
+let peersLastReceivedEventsFrom: Dictionary<number> = {};
 
-type QueuedProcessEvents = Array<QueuedProcessEvent>;
+type QueuedProcessEvents = Array<any>;
 
 let queuedProcessEvents: QueuedProcessEvents = [];
 
@@ -32,22 +30,33 @@ const funcDict: Dictionary<Function> = {
 
 export function ingestEventsToProcess(receivedEvents: any) {
 	for (const eventJSON of receivedEvents) {
-		const eventType: string = eventJSON.type;
-		if(!(eventType in funcDict)){
-			console.error("unknown event type: " + eventType);
+		if(!(eventJSON.type in funcDict)){
+			console.error("unknown event type: " + eventJSON.type);
 			continue;
 		}
-		queueEventToProcess(eventType, eventJSON);
+		if (!peersLastReceivedEventsFrom.hasOwnProperty(eventJSON.peerId)) {
+			peersLastReceivedEventsFrom[eventJSON.peerId] = eventJSON.timestamp;
+		}
+		let timeDiff = eventJSON.timestamp - peersLastReceivedEventsFrom[eventJSON.peerId];
+		if (timeDiff >= 0) {
+			peersLastReceivedEventsFrom[eventJSON.peerId] = eventJSON.timestamp;
+		}
+		else {
+			console.warn("ignoring old event " + eventJSON.type + " from peer " + eventJSON.peerId + ", old by " + (timeDiff * -1) + "ms");
+			continue;
+		}
+		queueEventToProcess(eventJSON);
 	}
 }
 
-function queueEventToProcess(eventType: string, json: JSON) {
-	queuedProcessEvents.push({eventType: eventType, json: json});
+function queueEventToProcess(eventJSON: any) {
+	queuedProcessEvents.push(eventJSON);
 }
 
 export function processReceivedEvents(): void {
 	for (const eventJSON of queuedProcessEvents) {
-		funcDict[eventJSON.eventType](eventJSON.json);
+		peersLastReceivedEventsFrom[eventJSON.peerId] = eventJSON.timestamp;
+		funcDict[eventJSON.type](eventJSON);
 	}
 	queuedProcessEvents.length = 0; // clear array
 }

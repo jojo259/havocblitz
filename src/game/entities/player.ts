@@ -26,7 +26,6 @@ let playerColors = [
 export class Player extends PhysicsEntity {
 
 	id: string;
-	lastUpdateEventTimestamp = 0;
 	team: string = "null";
 	freeFalling = false;
 	countryCode: string = "null";
