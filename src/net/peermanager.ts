@@ -3,7 +3,7 @@ import { Player } from "../game/entities/player";
 import { addNewPlayer, clientPlayerEntity } from "../game/entitymanager";
 import { MapSend } from "../game/events/mapsend";
 import { queueEvent } from "../game/tickingmanager";
-import { processReceivedEvents } from "../game/eventingestor";
+import { ingestEventsToProcess } from "../game/eventingestor";
 import { debugMode } from "../page/debugmode";
 
 export let clientPeerId: string;
@@ -92,7 +92,7 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 			let dataJson: JSON = JSON.parse(data);
 			if ("events" in dataJson) {
 				if (Array.isArray(dataJson.events)) {
-					processReceivedEvents(dataJson.events);
+					ingestEventsToProcess(dataJson.events);
 				}
 			}
 		}
