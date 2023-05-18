@@ -31,7 +31,7 @@ export function renderMap() {
 				drawImageRelativeRotated(tileImage, tileX, tileY, 1, 1, rotatedDegrees);
 			}
 			if (tileValue >= 6 && tileValue <= 9) {
-				let rotatedDegrees = 45 + 90 * (tileValue - 6);
+				let rotatedDegrees = (tileValue - 6) * -90 + 45;
 				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, (Math.sqrt(2) - 1) / 2, 0.5);
 				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, -(Math.sqrt(2) - 1) / 2, 0.5);
 			}
@@ -42,7 +42,7 @@ export function renderMap() {
 			if (tileValue > 0) {
 				let tileX = atX + startX;
 				let tileY = atY + startY;
-				//drawTextRelative(tileValue.toString(), "black", tileX + 0.5, tileY + 0.6);
+				drawTextRelative(tileValue.toString(), "black", tileX + 0.5, tileY + 0.6);
 			}
 		}
 	}
@@ -117,15 +117,25 @@ function pruneMap(mapArray: number[][]): number[][] {
 	let height = mapArray[0].length;
 	for(let pass = 1; pass <= 64; pass++) {
 		let prunedCount = 0;
-		for(let x = 1; x < width - 1; x++) {
-			for(let y = 1; y < height - 1; y++) {
+		for(let x = 2; x < width - 2; x++) {
+			for(let y = 2; y < height - 2; y++) {
 				if (mapArray[x][y] == 1) {
+					let veryFarNeighbors = 0;
+					for (let i = -2; i <= 2; i++) {
+						for (let j = -2; j <= 2; j++){
+							if (Math.abs(i) + Math.abs(j) == 4) {
+								if (mapArray[x + i][y + j] == 1) {
+									veryFarNeighbors += 1;
+								}
+							}
+						}
+					}
 					let farNeighbors = 0;
 					for (let i = -1; i <= 1; i++){
 						for (let j = -1; j <= 1; j++){
 							if (i != 0 || j != 0){
 								if (mapArray[x + i][y + j] == 1) {
-									farNeighbors += mapArray[x + i][y + j];
+									farNeighbors += 1;
 								}
 							}
 						}
@@ -135,12 +145,12 @@ function pruneMap(mapArray: number[][]): number[][] {
 						for (let j = -1; j <= 1; j++){
 							if (Math.abs(i) != Math.abs(j)){
 								if (mapArray[x + i][y + j] == 1) {
-									touchingNeighbors += mapArray[x + i][y + j];
+									touchingNeighbors += 1;
 								}
 							}
 						}
 					}
-					if (touchingNeighbors <= 1 || (touchingNeighbors <= 2 && farNeighbors <= 2)) {
+					if (touchingNeighbors <= 1 || (touchingNeighbors <= 2 && farNeighbors <= 2) || (false)) {
 						mapArray[x][y] = 0;
 						prunedCount++;
 					}
@@ -167,9 +177,9 @@ let slopeDict: SlopeDict = {
 	"1101": 4,
 	"0111": 5,
 	"1010": 6,
-	"1100": 7,
+	"0011": 7,
 	"0101": 8,
-	"0011": 9,
+	"1100": 9,
 }
 
 function slopifyMap(mapArray: number[][]): number[][] {
