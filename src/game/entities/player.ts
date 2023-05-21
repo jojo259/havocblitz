@@ -80,11 +80,6 @@ export class Player extends PhysicsEntity {
 		}
 	}
 
-	collide(collX: number, collY: number, sideX: number, sideY: number) {
-		super.collide(collX, collY, sideX, sideY);
-		this.freeFalling = false;
-	}
-
 	draw(): void {
 		super.draw();
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);

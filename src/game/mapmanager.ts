@@ -31,7 +31,7 @@ export function renderMap() {
 				drawImageRelativeRotated(tileImage, tileX, tileY, 1, 1, rotatedDegrees);
 			}
 			if (tileValue >= 6 && tileValue <= 9) {
-				let rotatedDegrees = (tileValue - 6) * -90 + 45;
+				let rotatedDegrees = (tileValue - 6) * 90 + 45;
 				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, (Math.sqrt(2) - 1) / 2, 0.5);
 				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, -(Math.sqrt(2) - 1) / 2, 0.5);
 			}
@@ -120,16 +120,6 @@ function pruneMap(mapArray: number[][]): number[][] {
 		for(let x = 2; x < width - 2; x++) {
 			for(let y = 2; y < height - 2; y++) {
 				if (mapArray[x][y] == 1) {
-					let veryFarNeighbors = 0;
-					for (let i = -2; i <= 2; i++) {
-						for (let j = -2; j <= 2; j++){
-							if (Math.abs(i) + Math.abs(j) == 4) {
-								if (mapArray[x + i][y + j] == 1) {
-									veryFarNeighbors += 1;
-								}
-							}
-						}
-					}
 					let farNeighbors = 0;
 					for (let i = -1; i <= 1; i++){
 						for (let j = -1; j <= 1; j++){
@@ -150,7 +140,7 @@ function pruneMap(mapArray: number[][]): number[][] {
 							}
 						}
 					}
-					if (touchingNeighbors <= 1 || (touchingNeighbors <= 2 && farNeighbors <= 2) || (false)) {
+					if (touchingNeighbors <= 1){// || (touchingNeighbors <= 2 && farNeighbors <= 2) || (false)) {
 						mapArray[x][y] = 0;
 						prunedCount++;
 					}
@@ -177,9 +167,9 @@ let slopeDict: SlopeDict = {
 	"1101": 4,
 	"0111": 5,
 	"1010": 6,
-	"0011": 7,
+	"1100": 7,
 	"0101": 8,
-	"1100": 9,
+	"0011": 9,
 }
 
 function slopifyMap(mapArray: number[][]): number[][] {
