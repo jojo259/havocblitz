@@ -24,16 +24,16 @@ export function initInputTracking() {
 
 	window.addEventListener("mousedown", (event) => {
 		keyDown("mouse" + event.button);
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener("mouseup", (event) => {
 		keyUp("mouse" + event.button);
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener("mousemove", (event) => {
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener('contextmenu', (event) => {
@@ -45,7 +45,7 @@ function processMouseEvent(event: MouseEvent) {
 	let canvasRect = canvasElem.getBoundingClientRect();
 	let mousePosRelativeX = (event.clientX - canvasRect.left) / canvasScale + clientPlayerEntity.posX - renderScaleX / 2;
 	let mousePosRelativeY = (event.clientY - canvasRect.top) / canvasScale + clientPlayerEntity.posY - renderScaleY / 2;
-	mousePos = {x: mousePosRelativeX, y: mousePosRelativeY}
+	mousePos = {x: mousePosRelativeX, y: mousePosRelativeY};
 	if (mouseButtonNumbers.includes(event.button)) {
 		event.preventDefault();
 	}

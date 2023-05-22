@@ -1,5 +1,5 @@
 import { PhysicsEntity } from "./physicsentity";
-import { clientPlayerEntity, spawnEntity } from "../entitymanager";
+import { spawnEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
 import { drawTextRelative } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
@@ -30,18 +30,26 @@ export class Player extends PhysicsEntity {
 	freeFalling = false;
 	countryCode: string = "null";
 	flagEmoji: string = "";
+	isClient = false;
+	canJump = false;
+	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
 
 	constructor(
 		id: string,
 		posX: number, 
 		posY: number,
+		isClient: boolean,
 	) {
+		if (!id) {
+			console.error("player id is falsey?!")
+		}
 		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
+		this.isClient = isClient;
 	}
 
 	tick(): void {
-		if (this == clientPlayerEntity) {
+		if (this.isClient) {
 			super.tick();
 			if (keyPressed["w"] || keyPressed[" "]) {
 				if (this.canJump || Math.abs(this.canWallJumpOnSide) == 1) {
@@ -80,16 +88,28 @@ export class Player extends PhysicsEntity {
 		}
 	}
 
+	collide (collX: number, collY: number, bearingDeg: number) {
+		this.freeFalling = false;
+
+		if (Math.abs(bearingDeg) <= 45) {
+			this.canJump = true;
+		}
+
+		if (Math.abs(bearingDeg) <= 1) {
+			this.velocityY = 0;
+		}
+
+		if (Math.abs(this.velocityX) > 0.1 && Math.abs(bearingDeg) >= 80 && Math.abs(bearingDeg) <= 100) {
+			this.canWallJumpOnSide = Math.sign(bearingDeg);
+			this.velocityX = 0;
+		}
+	}
+
 	limitVelocityX() {
 		this.velocityX *= 0.8;
 		if (Math.abs(this.velocityX) > playerMaximumVelocityX) {
 			this.velocityX = Math.sign(this.velocityX) * Math.max(playerMaximumVelocityX, this.velocityX - playerSpeedX);
 		}
-	}
-
-	collide(horizontal: boolean, vertical: boolean) {
-		super.collide(horizontal, vertical);
-		this.freeFalling = false;
 	}
 
 	draw(): void {
@@ -103,15 +123,16 @@ export class Player extends PhysicsEntity {
 		this.canJump = false;
 		this.canWallJumpOnSide = 0;
 		spawnParticlesAtPoint(this.posX, this.posY + 0.5, 32, 0.1, 0.5, 0.1, 0.5, 200, ["#aaa", "#ccc", "#fff"]);
-		if (this == clientPlayerEntity) {
+		if (this.isClient) {
 			queueEvent(new PlayerJump());
 		}
 	}
 
 	useItem(withMouseX: number, withMouseY: number) {
 		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
+		console.log("click at " + mousePos.x + " " + mousePos.y + " " + mouseBearing);
 		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
-		if (this == clientPlayerEntity) {
+		if (this.isClient) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
 		}
