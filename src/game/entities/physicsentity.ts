@@ -1,6 +1,6 @@
 import { SpriteEntity } from "./spriteentity";
 import { tileMap, getTileValue } from "../mapmanager";
-import { getBearing, getIntersection, getDist } from "../util";
+import { getBearing, getDist } from "../util";
 import { mousePos } from "../inputtracker";
 
 let bounceMult = 0.8;
@@ -228,10 +228,10 @@ function linePoint(
 	px: number,
 	py: number
 ): boolean {
-	const d1 = dist(px, py, x1, y1);
-	const d2 = dist(px, py, x2, y2);
+	const d1 = getDist(px, py, x1, y1);
+	const d2 = getDist(px, py, x2, y2);
 
-	const lineLen = dist(x1, y1, x2, y2);
+	const lineLen = getDist(x1, y1, x2, y2);
 
 	const buffer = 0.1;
 
@@ -240,12 +240,6 @@ function linePoint(
 	}
 
 	return false;
-}
-
-function dist(x1: number, y1: number, x2: number, y2: number): number {
-	const distX = x1 - x2;
-	const distY = y1 - y2;
-	return Math.sqrt(distX * distX + distY * distY);
 }
 
 const degToRad = (deg: number): number => {

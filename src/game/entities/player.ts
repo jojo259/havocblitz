@@ -99,7 +99,7 @@ export class Player extends PhysicsEntity {
 			this.velocityY = 0;
 		}
 
-		if (Math.abs(this.velocityX) > 0 && Math.abs(bearingDeg) >= 80 && Math.abs(bearingDeg) <= 100) {
+		if (Math.abs(this.velocityX) > 0.1 && Math.abs(bearingDeg) >= 80 && Math.abs(bearingDeg) <= 100) {
 			this.canWallJumpOnSide = Math.sign(bearingDeg);
 			this.velocityX = 0;
 		}

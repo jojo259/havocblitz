@@ -27,8 +27,8 @@ export function considerTicking() {
 			console.warn("ticking behind by " + ticksBehind + " tick(s)");
 		}
 		lastTicked += tickIntervalMs;
-		renderGame();
 		doGameTick();
+		renderGame();
 		lastTickDiffMs = Date.now() - lastTicked;
 	}
 }

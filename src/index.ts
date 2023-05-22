@@ -11,7 +11,7 @@ initClientPeer();
 
 queueResetCanvasResize();
 
-//setInterval(findRandomPeer, 1000);
+setInterval(findRandomPeer, 1000);
 
 setInterval(considerTicking, considerTickingIntervalMs);
 

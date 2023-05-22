@@ -24,16 +24,16 @@ export function initInputTracking() {
 
 	window.addEventListener("mousedown", (event) => {
 		keyDown("mouse" + event.button);
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener("mouseup", (event) => {
 		keyUp("mouse" + event.button);
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener("mousemove", (event) => {
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener('contextmenu', (event) => {
