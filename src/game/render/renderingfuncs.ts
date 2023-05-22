@@ -71,6 +71,8 @@ export function drawImageRelativeRotatedTranslated(image: CanvasImageSource, dra
 	);
 
 	canvasContext.restore();
+}
+
 export function drawImage(image: HTMLImageElement, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number) {
 	canvasContext.drawImage(image, drawX * canvasScale, drawY * canvasScale, drawSizeX * canvasScale, drawSizeY * canvasScale);
 }

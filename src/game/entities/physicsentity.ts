@@ -35,7 +35,7 @@ export class PhysicsEntity extends SpriteEntity {
 		color: number[]
 	) {
 		if (diameter > 1) {
-			console.error("entity diameter above 1 breaks collision logic");
+			console.error("entity diameter above 1 breaks collision logic"); // for now
 			diameter = 1;
 		}
 		super(posX, posY, diameter, spriteSrc, color);
@@ -44,6 +44,7 @@ export class PhysicsEntity extends SpriteEntity {
 	}
 
 	tick(): void {
+		this.posY += 0.01;
 		this.doMovement();
 		this.checkInMapBounds();
 	};
@@ -62,6 +63,8 @@ export class PhysicsEntity extends SpriteEntity {
 		this.posY += this.velocityY;
 
 		this.checkCollisions();
+
+		this.posY += 0.01;
 	}
 
 	draw() {
@@ -181,7 +184,6 @@ function lineCircle(
 
 	return { collision: false, closest: { x: closestX, y: closestY }, normalBearing: 0 };
 }
-
 
 function pointCircle(px: number, py: number, cx: number, cy: number, r: number): boolean {
 	const distX = px - cx;

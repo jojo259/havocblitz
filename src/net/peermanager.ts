@@ -6,14 +6,14 @@ import { queueEvent } from "../game/tickingmanager";
 import { ingestEventsToProcess } from "../game/eventingestor";
 import { debugMode } from "../page/debugmode";
 
-export let clientPeerId: string;
-export let clientPeer: Peer;
-
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
 if (debugMode) {
 	maxPeerIdNum = 4;
 }
+
+export let clientPeerId: string = getRandomPeerId();
+export let clientPeer: Peer;
 
 interface PeerConnections {
 	[peerId: string]: DataConnection;
@@ -21,10 +21,7 @@ interface PeerConnections {
 
 export let peerConnections: PeerConnections = {};
 
-initClientPeer();
-
-function initClientPeer() {
-	clientPeerId = getRandomPeerId();
+export function initClientPeer() {
 	if (clientPlayerEntity) {
 		clientPlayerEntity.id = clientPeerId;
 	}
