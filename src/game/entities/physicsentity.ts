@@ -1,6 +1,5 @@
 import { SpriteEntity } from "./spriteentity";
 import { tileMap, getTileValue } from "../mapmanager";
-import { drawImageRelative, drawCircleRelative } from "../render/renderingmanager";
 import { getBearing, getIntersection, getDist } from "../util";
 import { mousePos } from "../inputtracker";
 
@@ -20,6 +19,8 @@ let tileLines: TileLines = {
 	9: [[1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
 }
 
+import { drawImageRelative, drawCircleRelative } from "../render/renderingfuncs";
+
 export class PhysicsEntity extends SpriteEntity {
 	velocityX: number;
 	velocityY: number;
@@ -31,8 +32,13 @@ export class PhysicsEntity extends SpriteEntity {
 		posY: number,
 		diameter: number,
 		spriteSrc: string,
+		color: number[]
 	) {
-		super(posX, posY, diameter, spriteSrc);
+		if (diameter > 1) {
+			console.error("entity diameter above 1 breaks collision logic");
+			diameter = 1;
+		}
+		super(posX, posY, diameter, spriteSrc, color);
 		this.velocityX = 0;
 		this.velocityY = 0;
 	}

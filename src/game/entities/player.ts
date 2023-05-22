@@ -1,12 +1,12 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity, spawnEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
-import { drawTextRelative } from "../render/renderingmanager";
+import { drawTextRelative } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
 import { PlayerJump } from "../events/playerjump";
-import { toggleNetGraph } from "../render/hud";
+import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { Rocket, rocketSpeed } from "./rocket";
 import { CountryCode } from "../events/countrycode";
@@ -14,10 +14,18 @@ import { CountryCode } from "../events/countrycode";
 let playerSpeedX = 0.1;
 let playerMaximumVelocityX = 0.25;
 
+let playerColors = [
+	[1, 0, 0],
+	[0, 1, 0],
+	[0, 0, 1],
+	[1, 1, 0],
+	[0, 1, 1],
+	[1, 0, 1],
+]
+
 export class Player extends PhysicsEntity {
 
 	id: string;
-	lastUpdateEventTimestamp = 0;
 	team: string = "null";
 	freeFalling = false;
 	countryCode: string = "null";
@@ -28,9 +36,8 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 1, "./game/sprites/player.png");
+		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
-		this.setTeam();
 	}
 
 	tick(): void {
@@ -102,7 +109,7 @@ export class Player extends PhysicsEntity {
 		return;
 		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
 		console.log("click at " + mousePos.x + " " + mousePos.y + " " + mouseBearing);
-		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed));
+		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
 		if (this == clientPlayerEntity) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
@@ -131,26 +138,12 @@ export class Player extends PhysicsEntity {
 			this.flagEmoji = getFlagEmoji(this.countryCode);
 		}
 	}
+}
 
-	setTeam() {
-		let team="", newSpriteSrc="";
-		let pureID = +this.id.replace(/\D/g, "");
-		if (pureID % 2 == 0){
-			team = "red";
-			newSpriteSrc = "./game/sprites/playerred.png";
-		}
-		else if (pureID % 2 == 1){
-			team = "blue";
-			newSpriteSrc = "./game/sprites/playerblue.png";
-		}
-		else{
-			team = "NaN";
-			newSpriteSrc = "./game/sprites/player.png";
-		}
-		console.log("set player team to " + team);
-		this.sprite.src = newSpriteSrc;
-		this.team = team;
-	}
+function getColor(id: string) {
+	let pureID = +id.replace(/\D/g, "");
+	let color = playerColors[pureID % playerColors.length];
+	return color;
 }
 
 function getFlagEmoji(countryCode: string) {

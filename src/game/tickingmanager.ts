@@ -3,7 +3,8 @@ import { Event } from "./events/event";
 import { sendData } from "../net/peermanager";
 import { resetKeyPressed } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
-import { drawGame } from "./render/renderingmanager";
+import { renderGame } from "./render/renderer";
+import { processReceivedEvents } from "./eventingestor";
 
 export let considerTickingIntervalMs = 1;
 let ticksPerSecond = 64;
@@ -26,13 +27,14 @@ export function considerTicking() {
 			console.warn("ticking behind by " + ticksBehind + " tick(s)");
 		}
 		lastTicked += tickIntervalMs;
-		drawGame();
 		doGameTick();
+		renderGame();
 		lastTickDiffMs = Date.now() - lastTicked;
 	}
 }
 
 function doGameTick() {
+	processReceivedEvents();
 	tickLatencyTracker();
 	doEntityTicks();
 	sendEvents();

@@ -1,6 +1,6 @@
 import { clientPlayerEntity } from "./entitymanager";
 import { renderScaleX, renderScaleY } from "../page/canvas";
-import { drawImageRelative, drawTextRelative, drawImageRelativeRotated, drawImageRelativeRotatedTranslated } from "./render/renderingmanager";
+import { drawImageRelative, drawTextRelative, drawImageRelativeRotated, drawImageRelativeRotatedTranslated } from "./render/renderingfuncs";
 
 const tileImage = new Image();
 tileImage.src = "./game/sprites/tile.png";

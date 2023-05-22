@@ -1,15 +1,19 @@
 import { Peer, DataConnection } from "peerjs";
 import { Player } from "../game/entities/player";
-import { addNewPlayer } from "../game/entitymanager";
+import { addNewPlayer, clientPlayerEntity } from "../game/entitymanager";
 import { MapSend } from "../game/events/mapsend";
 import { queueEvent } from "../game/tickingmanager";
-import { processReceivedEvents } from "../game/eventingestor";
+import { ingestEventsToProcess } from "../game/eventingestor";
+import { debugMode } from "../page/debugmode";
 
 export let clientPeerId: string;
 export let clientPeer: Peer;
 
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
+if (debugMode) {
+	maxPeerIdNum = 4;
+}
 
 interface PeerConnections {
 	[peerId: string]: DataConnection;
@@ -21,6 +25,9 @@ initClientPeer();
 
 function initClientPeer() {
 	clientPeerId = getRandomPeerId();
+	if (clientPlayerEntity) {
+		clientPlayerEntity.id = clientPeerId;
+	}
 	console.log("client peer id is " + clientPeerId);
 
 	clientPeer = new Peer(clientPeerId)
@@ -32,6 +39,7 @@ function initClientPeer() {
 		/*
 		if (err.type == "unavailable-id") {
 			console.log("client peer id unavailable, remaking client peer")
+			destroyClientPeer();
 			initClientPeer();
 			setTimeout(() => {
 				initClientPeer();
@@ -39,8 +47,11 @@ function initClientPeer() {
 			return;
 		}
 		*/
-		console.log(err.type)
-		console.log(err)
+		if (err.type == "webrtc") { // does not seem to matter
+			return;
+		}
+		console.error(err)
+		console.error(err.type + ": " + err)
 	});
 
 	clientPeer.on('disconnected', function() {
@@ -81,7 +92,7 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 			let dataJson: JSON = JSON.parse(data);
 			if ("events" in dataJson) {
 				if (Array.isArray(dataJson.events)) {
-					processReceivedEvents(dataJson.events);
+					ingestEventsToProcess(dataJson.events);
 				}
 			}
 		}
@@ -103,17 +114,20 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 	});
 	setTimeout(() => {
 		if (!conn.open) {
-			console.log("closing unopen connection");
 			conn.close();
 		}
 	}, 8000);
 }
 
-window.addEventListener("beforeunload", (event) => {
+function destroyClientPeer() {
 	console.log("closing all connections and destroying client peer");
 	for (const [peerId, conn] of Object.entries(peerConnections)) {
 		conn.close();
 		delete peerConnections[peerId];
 	}
 	clientPeer.destroy();
+}
+
+window.addEventListener("beforeunload", (event) => {
+	destroyClientPeer();
 });
