@@ -3,8 +3,8 @@ export const canvasContext = canvasElem.getContext("2d")!;
 
 export let canvasScale = 0;
 
-export let renderScaleX = 30 / 4;
-export let renderScaleY = 20 / 4;
+export let renderScaleX = 30;
+export let renderScaleY = 20;
 
 export function resetCanvasSize() {
 	let windowWidth = window.innerWidth;

@@ -52,38 +52,36 @@ export class PhysicsEntity extends SpriteEntity {
 			this.velocityY = 0;
 		}
 
-		//this.posX += this.velocityX;
-		//this.posY += this.velocityY;
+		this.posX += this.velocityX;
+		this.posY += this.velocityY;
 
 		this.checkCollisions();
 	}
 
 	draw() {
-		drawCircleRelative(mousePos.x, mousePos.y, 2, "red");
+		drawCircleRelative(this.posX, this.posY, this.diameter, "red");
 	}
 
 	checkCollisions() {
 		let collisions: any[] = [];
-
-		let startX = Math.floor(Math.max(0, mousePos.x - 1));
-		let startY = Math.floor(Math.max(0, mousePos.y - 1));
-		let endX = Math.ceil(Math.min(tileMap.length, mousePos.x + 1));
-		let endY = Math.ceil(Math.min(tileMap[0].length, mousePos.y + 1));
+		let startX = Math.floor(Math.max(0, this.posX - 1));
+		let startY = Math.floor(Math.max(0, this.posY - 1));
+		let endX = Math.ceil(Math.min(tileMap.length, this.posX + 1));
+		let endY = Math.ceil(Math.min(tileMap[0].length, this.posY + 1));
 		for (let [atX, curRow] of tileMap.slice(startX, endX).entries()) {
 			for (let [atY, tileValue] of curRow.slice(startY, endY).entries()) {
 				if (tileValue > 0) {
 					let tileX = atX + startX;
 					let tileY = atY + startY;
 					let lines = tileLines[tileValue];
-					//console.log(lines);
 					lines.forEach(line => {
 						const result = lineCircle(
-							tileX + line[0], tileY + line[1], tileX + line[2], tileY + line[3], mousePos.x, mousePos.y, 1
+							tileX + line[0], tileY + line[1], tileX + line[2], tileY + line[3], this.posX, this.posY, this.diameter / 2
 						);
 						if (result.collision) {
 							collisions.push(result);
 							if (result.closest) {
-								console.log(`hit at closestX = ${result.closest.x}, closestY = ${result.closest.y}`);
+								//console.log(`hit at closestX = ${result.closest.x}, closestY = ${result.closest.y}`);
 								drawCircleRelative(result.closest.x, result.closest.y, 0.05, "cyan");
 							}
 						}
@@ -93,12 +91,12 @@ export class PhysicsEntity extends SpriteEntity {
 		}
 
 		if (collisions.length > 0) {
-			console.log("collisions: " + collisions.length);
+			//console.log("collisions: " + collisions.length);
 			let closestCollision: any = null;
 			let closestCollisionDist = 999;
 
 			collisions.forEach(collision => {
-				let collisionDist = getDist(mousePos.x, mousePos.y, collision.closest.x, collision.closest.y);
+				let collisionDist = getDist(this.posX, this.posY, collision.closest.x, collision.closest.y);
 				if (collisionDist < closestCollisionDist) {
 					closestCollision = collision;
 					closestCollisionDist = collisionDist;
@@ -107,16 +105,20 @@ export class PhysicsEntity extends SpriteEntity {
 			
 			// resolve collision
 			if (closestCollision) {
-				console.log("closestCollision:");
-				console.log(closestCollision);
+				//console.log("closestCollision:");
+				//console.log(closestCollision);
 				drawCircleRelative(closestCollision.closest.x, closestCollision.closest.y, 0.1, "blue");
 				if (closestCollision.hasOwnProperty("normalBearing")) {
 					if (closestCollision.normalBearing != null) {
-						console.log("normalBearing: " + closestCollision.normalBearing);
-						let cx = closestCollision.closest.x + Math.cos(closestCollision.normalBearing);
-						let cy = closestCollision.closest.y + Math.sin(closestCollision.normalBearing);
-						console.log("cx cy: " + cx + " " + cy);
+						//console.log("normalBearing: " + closestCollision.normalBearing);
+						let cx = closestCollision.closest.x + Math.cos(closestCollision.normalBearing) * this.diameter / 2 * 1.01;
+						let cy = closestCollision.closest.y + Math.sin(closestCollision.normalBearing) * this.diameter / 2 * 1.01;
+						//console.log("cx cy: " + cx + " " + cy);
 						drawCircleRelative(cx, cy, 0.1, "cyan");
+						this.posX = cx;
+						this.posY = cy;
+						this.velocityX = 0;
+						this.velocityY = 0;
 					}
 				}
 			}
