@@ -31,6 +31,8 @@ export class Player extends PhysicsEntity {
 	countryCode: string = "null";
 	flagEmoji: string = "";
 	isClient = false;
+	canJump = false;
+	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
 
 	constructor(
 		id: string,
@@ -83,6 +85,23 @@ export class Player extends PhysicsEntity {
 			if (Math.random() <= 0.01) {
 				queueEvent(new CountryCode(this.countryCode));
 			}
+		}
+	}
+
+	collide (collX: number, collY: number, bearingDeg: number) {
+		this.freeFalling = false;
+
+		if (Math.abs(bearingDeg) <= 45) {
+			this.canJump = true;
+		}
+
+		if (Math.abs(bearingDeg) <= 1) {
+			this.velocityY = 0;
+		}
+
+		if (Math.abs(this.velocityX) > 0 && Math.abs(bearingDeg) >= 80 && Math.abs(bearingDeg) <= 100) {
+			this.canWallJumpOnSide = Math.sign(bearingDeg);
+			this.velocityX = 0;
 		}
 	}
 

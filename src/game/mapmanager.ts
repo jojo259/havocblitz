@@ -42,7 +42,7 @@ export function renderMap() {
 			if (tileValue > 0) {
 				let tileX = atX + startX;
 				let tileY = atY + startY;
-				drawTextRelative(tileValue.toString(), "black", tileX + 0.5, tileY + 0.6);
+				//drawTextRelative(tileValue.toString(), "black", tileX + 0.5, tileY + 0.6);
 			}
 		}
 	}
