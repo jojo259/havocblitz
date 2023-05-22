@@ -1,5 +1,5 @@
 import { PhysicsEntity } from "./physicsentity";
-//import { spawnEntity } from "../entitymanager";
+import { spawnEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
 import { drawTextRelative } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
@@ -112,7 +112,7 @@ export class Player extends PhysicsEntity {
 	useItem(withMouseX: number, withMouseY: number) {
 		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
 		console.log("click at " + mousePos.x + " " + mousePos.y + " " + mouseBearing);
-		//spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
+		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
 		if (this.isClient) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));

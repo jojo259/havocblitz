@@ -67,10 +67,6 @@ export class PhysicsEntity extends SpriteEntity {
 		this.posY += 0.01;
 	}
 
-	draw() {
-		drawCircleRelative(this.posX, this.posY, this.diameter, "red");
-	}
-
 	checkCollisions() {
 		let collisions: any[] = [];
 		let startX = Math.floor(Math.max(0, this.posX - 1));
@@ -128,9 +124,21 @@ export class PhysicsEntity extends SpriteEntity {
 						this.posY = cy;
 						this.velocityX = 0;
 						this.velocityY = 0;
+						this.collide(radToDeg(closestCollision.lineBearing));
 					}
 				}
 			}
+		}
+	}
+
+	collide (bearingDeg: number) {
+		if (Math.random() <= 0.1) {
+			console.log("collided with bearingDeg " + bearingDeg);
+		}
+
+		if (Math.abs(bearingDeg) <= 45) {
+			this.canJump = true;
+			console.log(this.canJump);
 		}
 	}
 }
@@ -143,7 +151,7 @@ function lineCircle(
 	cx: number,
 	cy: number,
 	r: number
-): { collision: boolean, closest: { x: number, y: number } | null, normalBearing: (number | null) } {
+): { collision: boolean, closest: { x: number, y: number } | null, lineBearing: (number | null), normalBearing: (number | null) } {
 	
 	let lineBearing = getBearing(x1, y1, x2, y2);
 
@@ -167,9 +175,9 @@ function lineCircle(
 				closest = { x: x2, y: y2 }
 				normalBearing = getBearing(x2, y2, cx, cy);
 			}
-			return { collision: true, closest: closest, normalBearing: normalBearing };
+			return { collision: true, closest: closest, lineBearing: lineBearing, normalBearing: normalBearing };
 		}
-		return { collision: false, closest: { x: closestX, y: closestY }, normalBearing: null };
+		return { collision: false, closest: { x: closestX, y: closestY }, lineBearing: lineBearing, normalBearing: null };
 	}
 
 	const distXClosest = closestX - cx;
@@ -179,10 +187,10 @@ function lineCircle(
 	if (distance <= r) {
 		let normalBearing = lineBearing - degToRad(90);
 		const overlap = r - distance;
-		return { collision: true, closest: { x: closestX, y: closestY }, normalBearing: normalBearing };
+		return { collision: true, closest: { x: closestX, y: closestY }, lineBearing: lineBearing, normalBearing: normalBearing };
 	}
 
-	return { collision: false, closest: { x: closestX, y: closestY }, normalBearing: 0 };
+	return { collision: false, closest: { x: closestX, y: closestY }, lineBearing: lineBearing, normalBearing: 0 };
 }
 
 function pointCircle(px: number, py: number, cx: number, cy: number, r: number): boolean {
@@ -226,5 +234,9 @@ function dist(x1: number, y1: number, x2: number, y2: number): number {
 }
 
 const degToRad = (deg: number): number => {
-  return deg * (Math.PI / 180.0);
+	return deg * (Math.PI / 180.0);
+};
+
+const radToDeg = (rad) => {
+	return rad * (180.0 / Math.PI);
 };
