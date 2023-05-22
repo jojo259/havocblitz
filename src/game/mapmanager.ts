@@ -140,7 +140,7 @@ function pruneMap(mapArray: number[][]): number[][] {
 							}
 						}
 					}
-					if (touchingNeighbors <= 1){// || (touchingNeighbors <= 2 && farNeighbors <= 2) || (false)) {
+					if (touchingNeighbors <= 1) {
 						mapArray[x][y] = 0;
 						prunedCount++;
 					}
