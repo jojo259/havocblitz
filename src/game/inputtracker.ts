@@ -39,7 +39,7 @@ function updateMousePos(event: MouseEvent) {
 	let canvasRect = canvasElem.getBoundingClientRect();
 	let mousePosRelativeX = (event.clientX - canvasRect.left) / canvasScale + clientPlayerEntity.posX - renderScaleX / 2;
 	let mousePosRelativeY = (event.clientY - canvasRect.top) / canvasScale + clientPlayerEntity.posY - renderScaleY / 2;
-	mousePos = {x: mousePosRelativeX, y: mousePosRelativeY}
+	mousePos = {x: mousePosRelativeX, y: mousePosRelativeY};
 }
 
 function keyDown(key: string) {

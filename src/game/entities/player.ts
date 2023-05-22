@@ -28,7 +28,7 @@ export class Player extends PhysicsEntity {
 		posX: number, 
 		posY: number,
 	) {
-		super(posX, posY, 0.95, "./game/sprites/player.png");
+		super(posX, posY, 1, "./game/sprites/player.png");
 		this.id = id;
 		this.setTeam();
 	}
@@ -97,8 +97,11 @@ export class Player extends PhysicsEntity {
 	}
 
 	useItem(withMouseX: number, withMouseY: number) {
+		this.posX = mousePos.x;
+		this.posY = mousePos.y;
+		return;
 		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
-		console.log(mouseBearing);
+		console.log("click at " + mousePos.x + " " + mousePos.y + " " + mouseBearing);
 		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed));
 		if (this == clientPlayerEntity) {
 			console.log("sending PlayerUse event");

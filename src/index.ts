@@ -7,7 +7,7 @@ import { addListeners } from "./game/inputtracker";
 
 resetCanvasSize();
 
-setInterval(findRandomPeer, 1000);
+//setInterval(findRandomPeer, 1000);
 
 setInterval(considerTicking, considerTickingIntervalMs);
 
