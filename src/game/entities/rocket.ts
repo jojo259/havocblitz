@@ -46,5 +46,16 @@ export class Rocket extends PhysicsEntity {
 			}
 		});
 		this.destroy();
+				// JavaScript
+const textToSpeak = "boom";
+
+// Create an instance of the SpeechSynthesisUtterance object
+const speechSynthesisUtterance = new SpeechSynthesisUtterance();
+
+// Set the text to speak
+speechSynthesisUtterance.text = textToSpeak;
+
+// Speak the text
+speechSynthesis.speak(speechSynthesisUtterance);
 	}
 }
