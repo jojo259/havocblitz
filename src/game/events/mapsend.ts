@@ -1,14 +1,16 @@
 import { Event } from "./event";
 import { tileMap, currentMapGeneratedTimestamp, setCurrentMapGeneratedTimestamp } from "../mapmanager";
 import { clientPlayerEntity } from "../entitymanager";
+import { compress, decompress } from "lz-string";
 
 export class MapSend extends Event {
 
 	mapGeneratedTimestamp = currentMapGeneratedTimestamp;
-	sentMap: number[][] = tileMap;
+	compressedMapStr: string;
 
-	constructor () {
+	constructor() {
 		super("MapSend");
+		this.compressedMapStr = compress(JSON.stringify(tileMap));
 	}
 
 	static doEvent(json: any): void {
@@ -17,10 +19,11 @@ export class MapSend extends Event {
 			console.log("map is newer than client map, ignoring");
 			return;
 		}
-		setCurrentMapGeneratedTimestamp(json.mapGeneratedTimestamp)
+		setCurrentMapGeneratedTimestamp(json.mapGeneratedTimestamp);
+		const sentMap: number[][] = JSON.parse(decompress(json.compressedMapStr));
 		for (let x = 0; x < tileMap.length; x++) {
 			for (let y = 0; y < tileMap[x].length; y++) {
-				tileMap[x][y] = json.sentMap[x][y];
+				tileMap[x][y] = sentMap[x][y];
 			}
 		}
 		clientPlayerEntity.findSpawn();

@@ -1,8 +1,6 @@
 import { Peer, DataConnection } from "peerjs";
 import { Player } from "../game/entities/player";
 import { addNewPlayer, clientPlayerEntity } from "../game/entitymanager";
-import { MapSend } from "../game/events/mapsend";
-import { queueEvent } from "../game/tickingmanager";
 import { ingestEventsToProcess } from "../game/eventingestor";
 import { debugMode } from "../page/debugmode";
 
@@ -98,7 +96,6 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 		console.log("connected to peer")
 		peerConnections[conn.peer] = conn;
 		addNewPlayer(conn.peer);
-		queueEvent(new MapSend());
 	});
 	conn.on("close", () => {
 		console.log("connection closed");

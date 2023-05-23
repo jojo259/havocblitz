@@ -10,6 +10,7 @@ import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { Rocket, rocketSpeed } from "./rocket";
 import { CountryCode } from "../events/countrycode";
+import { MapSend } from "../events/mapsend";
 
 let playerSpeedX = 0.1;
 let playerMaximumVelocityX = 0.25;
@@ -84,6 +85,9 @@ export class Player extends PhysicsEntity {
 			}
 			if (Math.random() <= 0.01) {
 				queueEvent(new CountryCode(this.countryCode));
+			}
+			if (Math.random() <= 0.001) {
+				queueEvent(new MapSend());
 			}
 		}
 	}
