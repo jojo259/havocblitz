@@ -1,7 +1,7 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
-import { drawTextRelative, drawImageRelativeCircular } from "../render/renderingfuncs";
+import { drawTextRelative, drawImageRelativeCircularRotated } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
@@ -9,6 +9,7 @@ import { PlayerJump } from "../events/playerjump";
 import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { CountryCode } from "../events/countrycode";
+import { getBearing } from "../util";
 import { Item } from "../items/item";
 import { RocketLauncher } from "../items/rocketlauncher";
 import { BowAndArrow } from "../items/bowandarrow";
@@ -19,8 +20,8 @@ interface PlayerItems extends Array<Item> {
 }
 
 export let playerItems: PlayerItems = [
-	new BowAndArrow(),
 	new RocketLauncher(),
+	new BowAndArrow(),
 ]
 
 let playerSpeedX = 0.1;
@@ -44,6 +45,7 @@ export class Player extends PhysicsEntity {
 	freeFalling = false;
 	countryCode: string = "null";
 	flagEmoji: string = "";
+	mousePos: { [key: string]: number } = {x: 0, y: 0};
 
 	constructor(
 		id: string,
@@ -58,6 +60,7 @@ export class Player extends PhysicsEntity {
 	tick(): void {
 		if (this == clientPlayerEntity) {
 			super.tick();
+			this.mousePos = mousePos;
 			if (keyPressed["w"] || keyPressed[" "]) {
 				if (this.canJump || Math.abs(this.canWallJumpOnSide) == 1) {
 					this.jump();
@@ -91,7 +94,7 @@ export class Player extends PhysicsEntity {
 			if (keyPressed["scrollUp"] || keyPressed["e"]) {
 				this.setHeldItemSlot(this.heldItemSlot + 1);
 			}
-			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY));
+			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY, mousePos));
 			if (this.countryCode == "null" && Math.random() <= 0.01) {
 				this.checkCountryCode();
 			}
@@ -115,7 +118,7 @@ export class Player extends PhysicsEntity {
 
 	draw(): void {
 		super.draw();
-		drawImageRelativeCircular(playerItems[this.heldItemSlot].sprite, this.posX + 0.2, this.posY + 0.2, 0.8);
+		drawImageRelativeCircularRotated(playerItems[this.heldItemSlot].sprite, this.posX + 0.2, this.posY + 0.2, 0.8, getBearing(this.posX, this.posY, this.mousePos.x, this.mousePos.y) * (180 / Math.PI));
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
 		drawTextRelative(this.flagEmoji, "black", this.posX, this.posY - 1.2);
 	}
