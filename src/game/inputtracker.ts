@@ -24,16 +24,24 @@ export function initInputTracking() {
 
 	window.addEventListener("mousedown", (event) => {
 		keyDown("mouse" + event.button);
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener("mouseup", (event) => {
 		keyUp("mouse" + event.button);
-		processMouseEvent(event)
+		processMouseEvent(event);
 	});
 
 	window.addEventListener("mousemove", (event) => {
-		processMouseEvent(event)
+		processMouseEvent(event);
+	});
+
+	window.addEventListener("wheel", (event) => {
+		if (event.deltaY < 0) {
+			keyPressedFunc("scrollUp");
+		} else if (event.deltaY > 0) {
+			keyPressedFunc("scrollDown");
+		}
 	});
 
 	window.addEventListener('contextmenu', (event) => {
@@ -45,7 +53,7 @@ function processMouseEvent(event: MouseEvent) {
 	let canvasRect = canvasElem.getBoundingClientRect();
 	let mousePosRelativeX = (event.clientX - canvasRect.left) / canvasScale + clientPlayerEntity.posX - renderScaleX / 2;
 	let mousePosRelativeY = (event.clientY - canvasRect.top) / canvasScale + clientPlayerEntity.posY - renderScaleY / 2;
-	mousePos = {x: mousePosRelativeX, y: mousePosRelativeY}
+	mousePos = {x: mousePosRelativeX, y: mousePosRelativeY};
 	if (mouseButtonNumbers.includes(event.button)) {
 		event.preventDefault();
 	}
@@ -54,10 +62,14 @@ function processMouseEvent(event: MouseEvent) {
 function keyDown(key: string) {
 	console.log("key down: " + key);
 	if (!keyState[key]) {
-		keyPressed[key] = true;
-		console.log("key pressed: " + key);
+		keyPressedFunc(key);
 	}
 	keyState[key] = true;
+}
+
+function keyPressedFunc(key: string) {
+	keyPressed[key] = true;
+	console.log("key pressed: " + key);
 }
 
 function keyUp(key: string) {
