@@ -1,7 +1,7 @@
 import { PhysicsEntity } from "./physicsentity";
 import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
-import { drawTextRelative } from "../render/renderingfuncs";
+import { drawTextRelative, drawImageRelativeCircular } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
@@ -11,12 +11,15 @@ import { PlayerUse } from "../events/playeruse";
 import { CountryCode } from "../events/countrycode";
 import { Item } from "../items/item";
 import { RocketLauncher } from "../items/rocketlauncher";
+import { BowAndArrow } from "../items/bowandarrow";
+import { PlayerHeldItemSlot } from "../events/playerhelditemslot";
 
 interface PlayerItems extends Array<Item> {
 	[index: number]: Item;
 }
 
 export let playerItems: PlayerItems = [
+	new BowAndArrow(),
 	new RocketLauncher(),
 ]
 
@@ -35,7 +38,7 @@ let playerColors = [
 export class Player extends PhysicsEntity {
 
 	id: string;
-	heldItem: number;
+	heldItemSlot: number;
 	lastUpdateEventTimestamp = 0;
 	team: string = "null";
 	freeFalling = false;
@@ -49,7 +52,7 @@ export class Player extends PhysicsEntity {
 	) {
 		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
-		this.heldItem = 0;
+		this.heldItemSlot = 0;
 	}
 
 	tick(): void {
@@ -82,6 +85,12 @@ export class Player extends PhysicsEntity {
 				console.log("using item due to mouse")
 				this.useItem(mousePos.x, mousePos.y);
 			}
+			if (keyPressed["scrollDown"]) {
+				this.setHeldItemSlot(this.heldItemSlot - 1);
+			}
+			if (keyPressed["scrollUp"]) {
+				this.setHeldItemSlot(this.heldItemSlot + 1);
+			}
 			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY));
 			if (this.countryCode == "null" && Math.random() <= 0.01) {
 				this.checkCountryCode();
@@ -106,6 +115,7 @@ export class Player extends PhysicsEntity {
 
 	draw(): void {
 		super.draw();
+		drawImageRelativeCircular(playerItems[this.heldItemSlot].sprite, this.posX + 0.2, this.posY + 0.2, 0.8);
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
 		drawTextRelative(this.flagEmoji, "black", this.posX, this.posY - 1.2);
 	}
@@ -121,10 +131,23 @@ export class Player extends PhysicsEntity {
 	}
 
 	useItem(withMouseX: number, withMouseY: number) {
-		playerItems[this.heldItem].use(this, mousePos);
+		playerItems[this.heldItemSlot].use(this, {x: withMouseX, y: withMouseY});
 		if (this == clientPlayerEntity) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
+		}
+	}
+
+	setHeldItemSlot(toNum: number) {
+		if (toNum < 0) {
+			toNum = playerItems.length - 1;
+		}
+		if (toNum > playerItems.length - 1) {
+			toNum = 0;
+		}
+		this.heldItemSlot = toNum;
+		if (this == clientPlayerEntity) {
+			queueEvent(new PlayerHeldItemSlot(this.heldItemSlot));
 		}
 	}
 

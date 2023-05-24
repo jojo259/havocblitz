@@ -44,7 +44,7 @@ function renderHUD() {
 
 function renderItemSlot() {
 	drawImage(heldItemSlotImage, heldItemSlotPosX, heldItemSlotPosY, heldItemSlotScale, heldItemSlotScale);
-	playerItems[clientPlayerEntity.heldItem].draw(heldItemSlotPosX, heldItemSlotPosY, heldItemSlotScale);
+	playerItems[clientPlayerEntity.heldItemSlot].draw(heldItemSlotPosX, heldItemSlotPosY, heldItemSlotScale);
 }
 
 function renderPlayerMarkers() {

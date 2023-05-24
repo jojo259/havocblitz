@@ -5,6 +5,7 @@ import { LatencyCheckPing } from "./events/latencycheckping";
 import { LatencyCheckPong } from "./events/latencycheckpong";
 import { PlayerUse } from "./events/playeruse";
 import { CountryCode } from "./events/countrycode";
+import { PlayerHeldItemSlot } from "./events/playerhelditemslot";
 
 type Dictionary<T> = {
 	[key: string]: T;
@@ -18,6 +19,7 @@ const funcDict: Dictionary<Function> = {
 	"LatencyCheckPong": (JSON: any) => LatencyCheckPong.doEvent(JSON),
 	"PlayerUse": (JSON: any) => PlayerUse.doEvent(JSON),
 	"CountryCode": (JSON: any) => CountryCode.doEvent(JSON),
+	"PlayerHeldItemSlot": (JSON: any) => PlayerHeldItemSlot.doEvent(JSON),
 };
 
 export function processReceivedEvents(receivedEvents: any[]): void {
