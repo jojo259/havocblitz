@@ -1,5 +1,4 @@
 import { PhysicsEntity } from "./physicsentity";
-import { clientPlayerEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
 import { drawTextRelative, drawImageRelativeCircularRotated } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
@@ -159,7 +158,6 @@ export class Player extends PhysicsEntity {
 
 	useItem(withMouseX: number, withMouseY: number) {
 		playerItems[this.heldItemSlot].use(this, {x: withMouseX, y: withMouseY});
-		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
 		if (this.isClient) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
@@ -174,7 +172,7 @@ export class Player extends PhysicsEntity {
 			toNum = 0;
 		}
 		this.heldItemSlot = toNum;
-		if (this == clientPlayerEntity) {
+		if (this.isClient) {
 			queueEvent(new PlayerHeldItemSlot(this.heldItemSlot));
 		}
 	}

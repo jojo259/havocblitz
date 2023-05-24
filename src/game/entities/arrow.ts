@@ -22,7 +22,7 @@ export class Arrow extends Projectile {
 		spawnParticlesAtPoint(this.posX - this.velocityX, this.posY - this.velocityY, 8, 0.1, 0.3, 0.1, 0.1, 100, ["#fff", "#eee", "#ddd"]);
 	}
 
-	collide(horizontal: boolean, vertical: boolean) {
+	collide (collX: number, collY: number, bearingDeg: number) {
 		this.destroy();
 	}
 }

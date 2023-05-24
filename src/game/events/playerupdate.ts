@@ -23,16 +23,6 @@ export class PlayerUpdate extends Event {
 		entityList.forEach(entity => {
 			if (entity instanceof Player) {
 				if (entity.id == json.peerId) {
-					let timeDiff = json.timestamp - entity.lastUpdateEventTimestamp;
-					if (timeDiff > 0) {
-						entity.posX = json.posX;
-						entity.posY = json.posY;
-						entity.mousePos = json.mousePos;
-						entity.lastUpdateEventTimestamp = json.timestamp;
-					}
-					else {
-						console.warn("PlayerUpdate event is old by: " + (timeDiff * -1) + "ms");
-					}
 					entity.posX = json.posX;
 					entity.posY = json.posY;
 					entity.mousePos = json.mousePos;
