@@ -85,10 +85,10 @@ export class Player extends PhysicsEntity {
 				console.log("using item due to mouse")
 				this.useItem(mousePos.x, mousePos.y);
 			}
-			if (keyPressed["scrollDown"]) {
+			if (keyPressed["scrollDown"] || keyPressed["q"]) {
 				this.setHeldItemSlot(this.heldItemSlot - 1);
 			}
-			if (keyPressed["scrollUp"]) {
+			if (keyPressed["scrollUp"] || keyPressed["e"]) {
 				this.setHeldItemSlot(this.heldItemSlot + 1);
 			}
 			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY));
