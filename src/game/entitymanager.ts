@@ -7,20 +7,19 @@ import { clearCache } from "./render/spritemanager";
 import { queueCanvasResizeCountdownTimeMs } from "../page/canvas";
 
 export let entityList: Entity[] = [];
-export let clientPlayerEntity: Player;
+export let clientPlayerEntity: Player = new Player(clientPeerId, 0, 0, true);
 
 export function spawnEntity(entity: Entity) {
 	entityList.push(entity);
 }
 
 export function addClientPlayerEntity() {
-	clientPlayerEntity = new Player(clientPeerId, 0, 0);
 	clientPlayerEntity.findSpawn();
 	spawnEntity(clientPlayerEntity);
 }
 
 export function addNewPlayer(peerId: string) {
-	let newPlayer = new Player(peerId, 0, 0);
+	let newPlayer = new Player(peerId, 0, 0, false);
 	spawnEntity(newPlayer);
 }
 

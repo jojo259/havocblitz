@@ -9,6 +9,7 @@ import { PlayerJump } from "../events/playerjump";
 import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { CountryCode } from "../events/countrycode";
+import { MapSend } from "../events/mapsend";
 import { getBearing } from "../util";
 import { Item } from "../items/item";
 import { RocketLauncher } from "../items/rocketlauncher";
@@ -46,19 +47,27 @@ export class Player extends PhysicsEntity {
 	countryCode: string = "null";
 	flagEmoji: string = "";
 	mousePos: { [key: string]: number } = {x: 0, y: 0};
+	isClient = false;
+	canJump = false;
+	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
 
 	constructor(
 		id: string,
 		posX: number, 
 		posY: number,
+		isClient: boolean,
 	) {
+		if (!id) {
+			console.error("player id is falsey?!")
+		}
 		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
 		this.heldItemSlot = 0;
+		this.isClient = isClient;
 	}
 
 	tick(): void {
-		if (this == clientPlayerEntity) {
+		if (this.isClient) {
 			super.tick();
 			this.mousePos = mousePos;
 			if (keyPressed["w"] || keyPressed[" "]) {
@@ -101,6 +110,26 @@ export class Player extends PhysicsEntity {
 			if (Math.random() <= 0.01) {
 				queueEvent(new CountryCode(this.countryCode));
 			}
+			if (Math.random() <= 0.001) {
+				queueEvent(new MapSend());
+			}
+		}
+	}
+
+	collide (collX: number, collY: number, bearingDeg: number) {
+		this.freeFalling = false;
+
+		if (Math.abs(bearingDeg) <= 45) {
+			this.canJump = true;
+		}
+
+		if (Math.abs(bearingDeg) <= 1) {
+			this.velocityY = 0;
+		}
+
+		if (Math.abs(this.velocityX) > 0.1 && Math.abs(bearingDeg) >= 80 && Math.abs(bearingDeg) <= 100) {
+			this.canWallJumpOnSide = Math.sign(bearingDeg);
+			this.velocityX = 0;
 		}
 	}
 
@@ -109,11 +138,6 @@ export class Player extends PhysicsEntity {
 		if (Math.abs(this.velocityX) > playerMaximumVelocityX) {
 			this.velocityX = Math.sign(this.velocityX) * Math.max(playerMaximumVelocityX, this.velocityX - playerSpeedX);
 		}
-	}
-
-	collide(horizontal: boolean, vertical: boolean) {
-		super.collide(horizontal, vertical);
-		this.freeFalling = false;
 	}
 
 	draw(): void {
@@ -128,14 +152,15 @@ export class Player extends PhysicsEntity {
 		this.canJump = false;
 		this.canWallJumpOnSide = 0;
 		spawnParticlesAtPoint(this.posX, this.posY + 0.5, 32, 0.1, 0.5, 0.1, 0.5, 200, ["#aaa", "#ccc", "#fff"]);
-		if (this == clientPlayerEntity) {
+		if (this.isClient) {
 			queueEvent(new PlayerJump());
 		}
 	}
 
 	useItem(withMouseX: number, withMouseY: number) {
 		playerItems[this.heldItemSlot].use(this, {x: withMouseX, y: withMouseY});
-		if (this == clientPlayerEntity) {
+		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
+		if (this.isClient) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
 		}

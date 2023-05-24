@@ -33,6 +33,9 @@ export class PlayerUpdate extends Event {
 					else {
 						console.warn("PlayerUpdate event is old by: " + (timeDiff * -1) + "ms");
 					}
+					entity.posX = json.posX;
+					entity.posY = json.posY;
+					entity.mousePos = json.mousePos;
 				}
 			}
 		});

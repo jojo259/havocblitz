@@ -4,6 +4,7 @@ import { sendData } from "../net/peermanager";
 import { resetKeyPressed, updateMousePos } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
 import { renderGame } from "./render/renderer";
+import { processReceivedEvents } from "./eventingestor";
 
 export let considerTickingIntervalMs = 1;
 let ticksPerSecond = 64;
@@ -33,6 +34,7 @@ export function considerTicking() {
 }
 
 function doGameTick() {
+	processReceivedEvents();
 	tickLatencyTracker();
 	updateMousePos();
 	doEntityTicks();
