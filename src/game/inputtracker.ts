@@ -36,6 +36,14 @@ export function initInputTracking() {
 		processMouseEvent(event);
 	});
 
+	window.addEventListener("wheel", (event) => {
+		if (event.deltaY < 0) {
+			keyPressedFunc("scrollUp");
+		} else if (event.deltaY > 0) {
+			keyPressedFunc("scrollDown");
+		}
+	});
+
 	window.addEventListener('contextmenu', (event) => {
 		event.preventDefault();
 	});
@@ -54,10 +62,14 @@ function processMouseEvent(event: MouseEvent) {
 function keyDown(key: string) {
 	console.log("key down: " + key);
 	if (!keyState[key]) {
-		keyPressed[key] = true;
-		console.log("key pressed: " + key);
+		keyPressedFunc(key);
 	}
 	keyState[key] = true;
+}
+
+function keyPressedFunc(key: string) {
+	keyPressed[key] = true;
+	console.log("key pressed: " + key);
 }
 
 function keyUp(key: string) {
