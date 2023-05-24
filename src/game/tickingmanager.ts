@@ -1,7 +1,7 @@
 import { doEntityTicks, clientPlayerEntity } from "./entitymanager";
 import { Event } from "./events/event";
 import { sendData } from "../net/peermanager";
-import { resetKeyPressed } from "./inputtracker";
+import { resetKeyPressed, updateMousePos } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
 import { renderGame } from "./render/renderer";
 import { processReceivedEvents } from "./eventingestor";
@@ -36,6 +36,7 @@ export function considerTicking() {
 function doGameTick() {
 	processReceivedEvents();
 	tickLatencyTracker();
+	updateMousePos();
 	doEntityTicks();
 	sendEvents();
 	resetKeyPressed();
