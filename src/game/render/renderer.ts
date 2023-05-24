@@ -1,6 +1,6 @@
 import { entityList, clientPlayerEntity } from "../entitymanager";
-import { Player } from "../entities/player";
-import { canvasElem, canvasScale, canvasContext } from "../../page/canvas";
+import { Player, playerItems } from "../entities/player";
+import { canvasElem, canvasScale, canvasContext, renderScaleX, renderScaleY } from "../../page/canvas";
 import { peerLatencies } from "../../net/latencytracker";
 import { drawText, drawLine, drawImage, clearCanvas, drawImageRelative } from "./renderingfuncs";
 import { renderMap, mapWidth, mapHeight } from "../mapmanager";
@@ -12,6 +12,13 @@ const playerMarkerLineLength = canvasElem.width / 32;
 
 const backgroundImage = new Image();
 backgroundImage.src = "./game/sprites/background.png";
+
+let heldItemSlotScale = 2;
+let heldItemSlotPosX = 0.5;
+let heldItemSlotPosY = renderScaleY - heldItemSlotScale - 0.5;
+
+const heldItemSlotImage = new Image();
+heldItemSlotImage.src = "./game/sprites/helditemslot.png";
 
 export function renderGame() {
 	clearCanvas();
@@ -32,6 +39,12 @@ function renderHUD() {
 	if (netGraphEnabled) {
 		renderNetGraph();
 	}
+	renderItemSlot();
+}
+
+function renderItemSlot() {
+	drawImage(heldItemSlotImage, heldItemSlotPosX, heldItemSlotPosY, heldItemSlotScale, heldItemSlotScale);
+	playerItems[clientPlayerEntity.heldItemSlot].draw(heldItemSlotPosX, heldItemSlotPosY, heldItemSlotScale);
 }
 
 function renderPlayerMarkers() {

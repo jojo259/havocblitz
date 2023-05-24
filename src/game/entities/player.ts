@@ -1,16 +1,28 @@
 import { PhysicsEntity } from "./physicsentity";
-import { spawnEntity } from "../entitymanager";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
-import { drawTextRelative } from "../render/renderingfuncs";
+import { drawTextRelative, drawImageRelativeCircularRotated } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
 import { PlayerJump } from "../events/playerjump";
 import { toggleNetGraph } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
-import { Rocket, rocketSpeed } from "./rocket";
 import { CountryCode } from "../events/countrycode";
 import { MapSend } from "../events/mapsend";
+import { getBearing } from "../util";
+import { Item } from "../items/item";
+import { RocketLauncher } from "../items/rocketlauncher";
+import { BowAndArrow } from "../items/bowandarrow";
+import { PlayerHeldItemSlot } from "../events/playerhelditemslot";
+
+interface PlayerItems extends Array<Item> {
+	[index: number]: Item;
+}
+
+export let playerItems: PlayerItems = [
+	new RocketLauncher(),
+	new BowAndArrow(),
+]
 
 let playerSpeedX = 0.1;
 let playerMaximumVelocityX = 0.25;
@@ -27,10 +39,13 @@ let playerColors = [
 export class Player extends PhysicsEntity {
 
 	id: string;
+	heldItemSlot: number;
+	lastUpdateEventTimestamp = 0;
 	team: string = "null";
 	freeFalling = false;
 	countryCode: string = "null";
 	flagEmoji: string = "";
+	mousePos: { [key: string]: number } = {x: 0, y: 0};
 	isClient = false;
 	canJump = false;
 	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
@@ -46,12 +61,14 @@ export class Player extends PhysicsEntity {
 		}
 		super(posX, posY, 0.95, "./game/sprites/entities/player.png", getColor(id));
 		this.id = id;
+		this.heldItemSlot = 0;
 		this.isClient = isClient;
 	}
 
 	tick(): void {
 		if (this.isClient) {
 			super.tick();
+			this.mousePos = mousePos;
 			if (keyPressed["w"] || keyPressed[" "]) {
 				if (this.canJump || Math.abs(this.canWallJumpOnSide) == 1) {
 					this.jump();
@@ -79,7 +96,13 @@ export class Player extends PhysicsEntity {
 				console.log("using item due to mouse")
 				this.useItem(mousePos.x, mousePos.y);
 			}
-			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY));
+			if (keyPressed["scrollDown"] || keyPressed["q"]) {
+				this.setHeldItemSlot(this.heldItemSlot - 1);
+			}
+			if (keyPressed["scrollUp"] || keyPressed["e"]) {
+				this.setHeldItemSlot(this.heldItemSlot + 1);
+			}
+			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY, mousePos));
 			if (this.countryCode == "null" && Math.random() <= 0.01) {
 				this.checkCountryCode();
 			}
@@ -118,6 +141,7 @@ export class Player extends PhysicsEntity {
 
 	draw(): void {
 		super.draw();
+		drawImageRelativeCircularRotated(playerItems[this.heldItemSlot].sprite, this.posX + 0.2, this.posY + 0.2, 0.8, getBearing(this.posX, this.posY, this.mousePos.x, this.mousePos.y) * (180 / Math.PI));
 		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
 		drawTextRelative(this.flagEmoji, "black", this.posX, this.posY - 1.2);
 	}
@@ -133,12 +157,23 @@ export class Player extends PhysicsEntity {
 	}
 
 	useItem(withMouseX: number, withMouseY: number) {
-		let mouseBearing = Math.atan2(withMouseY - this.posY, withMouseX - this.posX);
-		console.log("click at " + mousePos.x + " " + mousePos.y + " " + mouseBearing);
-		spawnEntity(new Rocket(this.posX, this.posY, Math.cos(mouseBearing) * rocketSpeed, Math.sin(mouseBearing) * rocketSpeed, [0.5, 0, 0]));
+		playerItems[this.heldItemSlot].use(this, {x: withMouseX, y: withMouseY});
 		if (this.isClient) {
 			console.log("sending PlayerUse event");
 			queueEvent(new PlayerUse(withMouseX, withMouseY));
+		}
+	}
+
+	setHeldItemSlot(toNum: number) {
+		if (toNum < 0) {
+			toNum = playerItems.length - 1;
+		}
+		if (toNum > playerItems.length - 1) {
+			toNum = 0;
+		}
+		this.heldItemSlot = toNum;
+		if (this.isClient) {
+			queueEvent(new PlayerHeldItemSlot(this.heldItemSlot));
 		}
 	}
 

@@ -6,7 +6,7 @@ import { LatencyCheckPing } from "./events/latencycheckping";
 import { LatencyCheckPong } from "./events/latencycheckpong";
 import { PlayerUse } from "./events/playeruse";
 import { CountryCode } from "./events/countrycode";
-import { peerConnections } from "../net/peermanager";
+import { PlayerHeldItemSlot } from "./events/playerhelditemslot";
 
 let peersLastReceivedEventsFrom: Dictionary<number> = {};
 
@@ -26,6 +26,7 @@ const funcDict: Dictionary<Function> = {
 	"LatencyCheckPong": (JSON: any) => LatencyCheckPong.doEvent(JSON),
 	"PlayerUse": (JSON: any) => PlayerUse.doEvent(JSON),
 	"CountryCode": (JSON: any) => CountryCode.doEvent(JSON),
+	"PlayerHeldItemSlot": (JSON: any) => PlayerHeldItemSlot.doEvent(JSON),
 };
 
 export function ingestEventsToProcess(receivedEvents: any) {
