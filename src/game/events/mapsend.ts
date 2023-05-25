@@ -20,6 +20,10 @@ export class MapSend extends Event {
 			return;
 		}
 		const sentMap: number[][] = JSON.parse(decompress(json.compressedMapStr));
+		if (!sentMap) {
+			console.error("no map received");
+			return;
+		}
 		for (let x = 0; x < tileMap.length; x++) {
 			for (let y = 0; y < tileMap[x].length; y++) {
 				tileMap[x][y] = sentMap[x][y];
