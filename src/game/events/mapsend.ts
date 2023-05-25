@@ -10,7 +10,13 @@ export class MapSend extends Event {
 
 	constructor() {
 		super("MapSend");
-		this.compressedMapStr = compress(JSON.stringify(tileMap));
+		let mapStr = "";
+		for (let x = 0; x < tileMap.length; x++) {
+			for (let y = 0; y < tileMap[x].length; y++) {
+				mapStr += tileMap[x][y];
+			}
+		}
+		this.compressedMapStr = compress(mapStr);
 	}
 
 	static doEvent(json: any): void {
@@ -19,14 +25,16 @@ export class MapSend extends Event {
 			console.log("map is newer than client map, ignoring");
 			return;
 		}
-		const sentMap: number[][] = JSON.parse(decompress(json.compressedMapStr));
-		if (!sentMap) {
-			console.error("no map received");
+		const sentMapStr: string = decompress(json.compressedMapStr);
+		if (!sentMapStr) {
+			console.error("no map received (probably compression failure)");
 			return;
 		}
+		let atIndex = 0;
 		for (let x = 0; x < tileMap.length; x++) {
 			for (let y = 0; y < tileMap[x].length; y++) {
-				tileMap[x][y] = sentMap[x][y];
+				tileMap[x][y] = parseInt(sentMapStr.charAt(atIndex));
+				atIndex++;;
 			}
 		}
 		clientPlayerEntity.findSpawn();
