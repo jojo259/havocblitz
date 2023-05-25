@@ -1,9 +1,13 @@
 import { clientPlayerEntity } from "./entitymanager";
 import { renderScaleX, renderScaleY } from "../page/canvas";
-import { drawImageRelative, drawTextRelative, drawImageRelativeRotated, drawImageRelativeRotatedTranslated } from "./render/renderingfuncs";
+import { drawImageRelative, drawTextRelative, drawImageRelativeRotated, drawImageRelativeRotatedTranslated, drawImageRelativeClipped } from "./render/renderingfuncs";
 
-const tileImage = new Image();
-tileImage.src = "./game/sprites/tile.png";
+const tileBaseImage = new Image();
+tileBaseImage.src = "./game/sprites/tilebase.png";
+
+const tileTopImage = new Image();
+tileTopImage.src = "./game/sprites/tiletop.png";
+
 let mapDensity = 40; //Change for more or less density (ranges from 1-100)
 let genAmount = 2; //how many cycles to generate
 export let mapWidth = 300;
@@ -12,6 +16,22 @@ export let currentMapGeneratedTimestamp = Date.now();
 
 export function setCurrentMapGeneratedTimestamp(to: number) {
 	currentMapGeneratedTimestamp = to;
+}
+
+type TilePoints = {
+	[key: number]: number[][];
+}
+
+export const tilePoints: TilePoints = {
+	1: [[0, 0], [1, 0], [1, 1,], [0, 1]],
+	2: [[0, 0], [1, 0], [1, 1,], [0, 1]],
+	3: [[0, 0], [1, 0], [1, 1,], [0, 1]],
+	4: [[0, 0], [1, 0], [1, 1,], [0, 1]],
+	5: [[0, 0], [1, 0], [1, 1,], [0, 1]],
+	6: [[0, 0], [1, 1], [0, 1]],
+	7: [[0, 0], [1, 0], [0, 1]],
+	8: [[0, 0], [1, 0], [1, 1]],
+	9: [[1, 0], [1, 1], [0, 1]],
 }
 
 export function renderMap() {
@@ -23,17 +43,23 @@ export function renderMap() {
 		for (let [atY, tileValue] of curRow.slice(startY, endY).entries()) {
 			let tileX = atX + startX;
 			let tileY = atY + startY;
-			if (tileValue == 1) {
-				drawImageRelative(tileImage, tileX, tileY, 1, 1);
+			if (tileValue > 0) {
+				drawImageRelativeClipped(tileBaseImage, tileX, tileY, 1, 1, tilePoints[tileValue]);
 			}
+		}
+	}
+	for (let [atX, curRow] of tileMap.slice(startX, endX).entries()) {
+		for (let [atY, tileValue] of curRow.slice(startY, endY).entries()) {
+			let tileX = atX + startX;
+			let tileY = atY + startY;
 			if (tileValue >= 2 && tileValue <= 5) {
 				let rotatedDegrees = 90 * (tileValue - 2);
-				drawImageRelativeRotated(tileImage, tileX, tileY, 1, 1, rotatedDegrees);
+				drawImageRelativeRotated(tileTopImage, tileX, tileY, 1, 1, rotatedDegrees);
 			}
 			if (tileValue >= 6 && tileValue <= 9) {
 				let rotatedDegrees = (tileValue - 6) * 90 + 45;
-				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, (Math.sqrt(2) - 1) / 2, 0.5);
-				drawImageRelativeRotatedTranslated(tileImage, tileX, tileY, 1, 1, rotatedDegrees, -(Math.sqrt(2) - 1) / 2, 0.5);
+				drawImageRelativeRotatedTranslated(tileTopImage, tileX, tileY, 1, 1, rotatedDegrees, (Math.sqrt(2) - 1) / 2, 0.5);
+				drawImageRelativeRotatedTranslated(tileTopImage, tileX, tileY, 1, 1, rotatedDegrees, -(Math.sqrt(2) - 1) / 2, 0.5);
 			}
 		}
 	}
@@ -140,7 +166,20 @@ function pruneMap(mapArray: number[][]): number[][] {
 							}
 						}
 					}
-					if (touchingNeighbors <= 1) {
+					let neighborsString = "";
+					for (let i = -1; i <= 1; i++){
+						for (let j = -1; j <= 1; j++){
+							if (Math.abs(i) != Math.abs(j)){
+								if (mapArray[x + i][y + j] == 0) {
+									neighborsString += "0";
+								}
+								else {
+									neighborsString += "1";
+								}
+							}
+						}
+					}
+					if (touchingNeighbors <= 1 || neighborsString == "1001" || neighborsString == "0110") {
 						mapArray[x][y] = 0;
 						prunedCount++;
 					}

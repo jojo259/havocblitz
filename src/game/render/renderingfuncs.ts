@@ -29,6 +29,37 @@ export function drawImageRelative(image: HTMLImageElement, drawX: number, drawY:
 	canvasContext.drawImage(image, getRelativeX(drawX), getRelativeY(drawY), drawSizeX * canvasScale, drawSizeY * canvasScale);
 }
 
+export function drawImageRelativeClipped(
+	image: HTMLImageElement,
+	drawX: number,
+	drawY: number,
+	drawSizeX: number,
+	drawSizeY: number,
+	points: number[][]
+) {
+	let relativeX = getRelativeX(drawX);
+	let relativeY = getRelativeY(drawY);
+
+	canvasContext.save();
+	const polygon = new Path2D();
+	polygon.moveTo(points[0][0] * canvasScale + relativeX, points[0][1] * canvasScale + relativeY);
+
+	for (let i = 1; i < points.length; i++) {
+		polygon.lineTo(points[i][0] * canvasScale + relativeX, points[i][1] * canvasScale + relativeY);
+	}
+
+	polygon.closePath();
+	canvasContext.clip(polygon);
+	canvasContext.drawImage(
+		image,
+		relativeX,
+		relativeY,
+		drawSizeX * canvasScale,
+		drawSizeY * canvasScale
+	);
+	canvasContext.restore();
+}
+
 export function drawImageRelativeRotated(image: CanvasImageSource, drawX: number, drawY: number, drawSizeX: number, drawSizeY: number, rotatedDegrees: number) {
 	canvasContext.save();
 	

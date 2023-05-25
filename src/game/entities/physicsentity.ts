@@ -1,7 +1,8 @@
 import { SpriteEntity } from "./spriteentity";
-import { tileMap, getTileValue } from "../mapmanager";
+import { tileMap, getTileValue, tilePoints } from "../mapmanager";
 import { getBearing, getDist } from "../util";
 import { mousePos } from "../inputtracker";
+import { drawImageRelative, drawCircleRelative } from "../render/renderingfuncs";
 
 let bounceMult = 0.8;
 
@@ -9,19 +10,24 @@ type TileLines = {
 	[key: number]: number[][];
 }
 
-let tileLines: TileLines = {
-	1: [[0, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 0, 0]],
-	2: [[0, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 0, 0]],
-	3: [[0, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 0, 0]],
-	4: [[0, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 0, 0]],
-	5: [[0, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 0, 0]],
-	6: [[0, 0, 1, 1], [1, 1, 0, 1], [0, 1, 0, 0]],
-	7: [[0, 0, 1, 0], [1, 0, 0, 1], [0, 1, 0, 0]],
-	8: [[0, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0]],
-	9: [[1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
-}
+let tileLines: TileLines = []
 
-import { drawImageRelative, drawCircleRelative } from "../render/renderingfuncs";
+// pre-process tile points into lines for collision calculations
+Object.keys(tilePoints).forEach((value: string, i: number, array: string[]) => {
+	const points = tilePoints[i + 1];
+	let line = [];
+	for (let [o, point] of points.entries()) {
+		let nextPoint;
+		if (o < points.length - 1) {
+			nextPoint = points[o + 1];
+		}
+		else {
+			nextPoint = points[0];
+		}
+		line.push([point[0], point[1], nextPoint[0], nextPoint[1]]);
+	}
+	tileLines[i + 1] = line;
+});
 
 export class PhysicsEntity extends SpriteEntity {
 	velocityX: number;
