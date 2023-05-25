@@ -19,7 +19,6 @@ export class MapSend extends Event {
 			console.log("map is newer than client map, ignoring");
 			return;
 		}
-		setCurrentMapGeneratedTimestamp(json.mapGeneratedTimestamp);
 		const sentMap: number[][] = JSON.parse(decompress(json.compressedMapStr));
 		for (let x = 0; x < tileMap.length; x++) {
 			for (let y = 0; y < tileMap[x].length; y++) {
@@ -27,5 +26,6 @@ export class MapSend extends Event {
 			}
 		}
 		clientPlayerEntity.findSpawn();
+		setCurrentMapGeneratedTimestamp(json.mapGeneratedTimestamp);
 	}
 }
