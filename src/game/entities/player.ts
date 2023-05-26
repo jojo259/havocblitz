@@ -5,7 +5,7 @@ import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
 import { PlayerJump } from "../events/playerjump";
-import { toggleNetGraph } from "../render/renderer";
+import { toggleDebugVisuals } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { CountryCode } from "../events/countrycode";
 import { MapSend } from "../events/mapsend";
@@ -90,7 +90,7 @@ export class Player extends PhysicsEntity {
 				this.limitVelocityX();
 			}
 			if (keyPressed["l"]) {
-				toggleNetGraph();
+				toggleDebugVisuals();
 			}
 			if (keyPressed["mouse0"]) {
 				console.log("using item due to mouse")

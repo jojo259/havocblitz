@@ -2,10 +2,11 @@ import { entityList, clientPlayerEntity } from "../entitymanager";
 import { Player, playerItems } from "../entities/player";
 import { canvasElem, canvasScale, canvasContext, renderScaleX, renderScaleY } from "../../page/canvas";
 import { peerLatencies } from "../../net/latencytracker";
-import { drawText, drawLine, drawImage, clearCanvas, drawImageRelative } from "./renderingfuncs";
+import { drawText, drawLine, drawImage, clearCanvas, drawImageRelative, drawCircleRelative } from "./renderingfuncs";
 import { renderMap, mapWidth, mapHeight } from "../mapmanager";
+import { PhysicsEntity } from "../entities/physicsentity";
 
-let netGraphEnabled = false;
+export let debugVisualsEnabled = false;
 
 const playerMarkerLineStartOffset = canvasElem.width / 32;
 const playerMarkerLineLength = canvasElem.width / 32;
@@ -26,6 +27,11 @@ export function renderGame() {
 	renderMap();
 	entityList.forEach(entity => {
 		entity.draw();
+		if (debugVisualsEnabled) {
+			if (entity instanceof PhysicsEntity) {
+				drawCircleRelative(entity.posX, entity.posY, entity.diameter, "red");
+			}
+		}
 	});
 	renderHUD();
 }
@@ -36,7 +42,7 @@ function renderBackground() {
 
 function renderHUD() {
 	renderPlayerMarkers();
-	if (netGraphEnabled) {
+	if (debugVisualsEnabled) {
 		renderNetGraph();
 	}
 	renderItemSlot();
@@ -71,8 +77,8 @@ function renderPlayerMarkers() {
 	});
 }
 
-export function toggleNetGraph() {
-	netGraphEnabled = !netGraphEnabled;
+export function toggleDebugVisuals() {
+	debugVisualsEnabled = !debugVisualsEnabled;
 }
 
 function renderNetGraph() {

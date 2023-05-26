@@ -3,7 +3,7 @@ import { Event } from "./events/event";
 import { sendData } from "../net/peermanager";
 import { resetKeyPressed, updateMousePos } from "./inputtracker";
 import { tickLatencyTracker } from "../net/latencytracker";
-import { renderGame } from "./render/renderer";
+import { renderGame, debugVisualsEnabled } from "./render/renderer";
 import { processReceivedEvents } from "./eventingestor";
 
 export let considerTickingIntervalMs = 1;
@@ -27,8 +27,14 @@ export function considerTicking() {
 			console.warn("ticking behind by " + ticksBehind + " tick(s)");
 		}
 		lastTicked += tickIntervalMs;
-		doGameTick();
-		renderGame();
+		if (debugVisualsEnabled) { // switch the order so game logic can draw stuff after the regular drawing has happened (introduces 1 tick of rendering latency)
+			renderGame();
+			doGameTick();
+		}
+		else {
+			doGameTick();
+			renderGame();
+		}
 		lastTickDiffMs = Date.now() - lastTicked;
 	}
 }

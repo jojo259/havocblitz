@@ -2,7 +2,8 @@ import { SpriteEntity } from "./spriteentity";
 import { tileMap, getTileValue, tilePoints } from "../mapmanager";
 import { getBearing, getDist } from "../util";
 import { mousePos } from "../inputtracker";
-import { drawImageRelative, drawCircleRelative } from "../render/renderingfuncs";
+import { drawImageRelative, drawCircleRelative, drawLineRelative } from "../render/renderingfuncs";
+import { debugVisualsEnabled } from "../render/renderer";
 
 let bounceMult = 0.8;
 
@@ -86,10 +87,6 @@ export class PhysicsEntity extends SpriteEntity {
 						);
 						if (result.collision) {
 							collisions.push(result);
-							if (result.closest) {
-								//console.log(`hit at closestX = ${result.closest.x}, closestY = ${result.closest.y}`);
-								drawCircleRelative(result.closest.x, result.closest.y, 0.05, "cyan");
-							}
 						}
 					});
 				}
@@ -97,7 +94,6 @@ export class PhysicsEntity extends SpriteEntity {
 		}
 
 		if (collisions.length > 0) {
-			//console.log("collisions: " + collisions.length);
 			let closestCollision: any = null;
 			let closestCollisionDist = 999;
 
@@ -111,16 +107,14 @@ export class PhysicsEntity extends SpriteEntity {
 			
 			// resolve collision
 			if (closestCollision) {
-				//console.log("closestCollision:");
-				//console.log(closestCollision);
-				drawCircleRelative(closestCollision.closest.x, closestCollision.closest.y, 0.1, "blue");
+				if (debugVisualsEnabled) {
+					drawLineRelative(this.posX, this.posY, closestCollision.closest.x, closestCollision.closest.y, 0.05, "cyan");
+					drawCircleRelative(closestCollision.closest.x, closestCollision.closest.y, 0.1, "blue");
+				}
 				if (closestCollision.hasOwnProperty("normalBearing")) {
 					if (closestCollision.normalBearing != null) {
-						//console.log("normalBearing: " + closestCollision.normalBearing);
 						let cx = closestCollision.closest.x + Math.cos(closestCollision.normalBearing) * this.diameter / 2 * 1.01;
 						let cy = closestCollision.closest.y + Math.sin(closestCollision.normalBearing) * this.diameter / 2 * 1.01;
-						//console.log("cx cy: " + cx + " " + cy);
-						drawCircleRelative(cx, cy, 0.1, "cyan");
 						this.posX = cx;
 						this.posY = cy;
 						if (closestCollision.newVelocity) {

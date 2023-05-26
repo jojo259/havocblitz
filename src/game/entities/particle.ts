@@ -1,5 +1,6 @@
 import { Entity } from "./entity";
 import { drawCircleRelative } from "../render/renderingfuncs";
+import { debugVisualsEnabled } from "../render/renderer";
 
 export class Particle extends Entity {
 
@@ -33,6 +34,8 @@ export class Particle extends Entity {
 	}
 
 	draw() {
-		drawCircleRelative(this.posX, this.posY, this.diameter, this.color);
+		if (!debugVisualsEnabled) {
+			drawCircleRelative(this.posX, this.posY, this.diameter, this.color);
+		}
 	}
 }

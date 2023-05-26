@@ -126,6 +126,15 @@ export function drawCircleRelative(x: number, y: number, diameter: number, color
 	canvasContext.fill();
 }
 
+export function drawLineRelative(startX: number, startY: number, endX: number, endY: number, width: number, color: string) {
+	const relativeStartX = getRelativeX(startX);
+	const relativeStartY = getRelativeY(startY);
+	const relativeEndX = getRelativeX(endX);
+	const relativeEndY = getRelativeY(endY);
+
+	drawLine(relativeStartX, relativeStartY, relativeEndX, relativeEndY, width * canvasScale, color);
+}
+
 export function drawLine(startX: number, startY: number, endX: number, endY: number, width: number, color: string) {
 	canvasContext.beginPath();
 	canvasContext.moveTo(startX, startY);
