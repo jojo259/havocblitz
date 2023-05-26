@@ -40,10 +40,6 @@ export class PhysicsEntity extends SpriteEntity {
 		spriteSrc: string,
 		color: number[]
 	) {
-		if (diameter > 1) {
-			console.error("entity diameter above 1 breaks collision logic"); // for now
-			diameter = 1;
-		}
 		super(posX, posY, diameter, spriteSrc, color);
 		this.velocityX = 0;
 		this.velocityY = 0;
@@ -74,11 +70,12 @@ export class PhysicsEntity extends SpriteEntity {
 	}
 
 	checkCollisions() {
+		let collisionsSquareSideLengthHalved = this.diameter / 2;
 		let collisions: any[] = [];
-		let startX = Math.floor(Math.max(0, this.posX - 1));
-		let startY = Math.floor(Math.max(0, this.posY - 1));
-		let endX = Math.ceil(Math.min(tileMap.length, this.posX + 1));
-		let endY = Math.ceil(Math.min(tileMap[0].length, this.posY + 1));
+		let startX = Math.floor(Math.max(0, this.posX - collisionsSquareSideLengthHalved));
+		let startY = Math.floor(Math.max(0, this.posY - collisionsSquareSideLengthHalved));
+		let endX = Math.ceil(Math.min(tileMap.length, this.posX + collisionsSquareSideLengthHalved));
+		let endY = Math.ceil(Math.min(tileMap[0].length, this.posY + collisionsSquareSideLengthHalved));
 		for (let [atX, curRow] of tileMap.slice(startX, endX).entries()) {
 			for (let [atY, tileValue] of curRow.slice(startY, endY).entries()) {
 				if (tileValue > 0) {
