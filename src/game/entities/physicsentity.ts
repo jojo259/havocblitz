@@ -65,8 +65,6 @@ export class PhysicsEntity extends SpriteEntity {
 		this.posY += this.velocityY;
 
 		this.checkCollisions();
-
-		this.posY += 0.01;
 	}
 
 	checkCollisions() {
