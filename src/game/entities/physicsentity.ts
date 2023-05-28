@@ -65,6 +65,10 @@ export class PhysicsEntity extends SpriteEntity {
 		this.posX += this.velocityX;
 		this.posY += this.velocityY;
 
+		if (debugVisualsEnabled) {
+			drawLineRelative(this.posX, this.posY, this.posX + this.velocityX, this.posY + this.velocityY, 0.05, "yellow");
+		}
+
 		this.checkCollisions();
 	}
 
