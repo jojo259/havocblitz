@@ -5,8 +5,9 @@ import { peerLatencies } from "../../net/latencytracker";
 import { drawText, drawLine, drawImage, clearCanvas, drawImageRelative, drawCircleRelative } from "./renderingfuncs";
 import { renderMap, mapWidth, mapHeight } from "../mapmanager";
 import { PhysicsEntity } from "../entities/physicsentity";
+import { debugMode } from "../../page/debugmode";
 
-export let debugVisualsEnabled = false;
+export let debugVisualsEnabled = debugMode;
 
 const playerMarkerLineStartOffset = canvasElem.width / 32;
 const playerMarkerLineLength = canvasElem.width / 32;
