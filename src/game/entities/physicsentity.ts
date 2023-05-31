@@ -128,14 +128,14 @@ export class PhysicsEntity extends SpriteEntity {
 						else {
 							console.error("missing closestCollision.newVelocity");
 						}
-						this.collide(closestCollision.closest.x, closestCollision.closest.y, radToDeg(closestCollision.lineBearing));
+						this.surfaceCollide(closestCollision.closest.x, closestCollision.closest.y, radToDeg(closestCollision.lineBearing));
 					}
 				}
 			}
 		}
 	}
 
-	collide (collX: number, collY: number, bearingDeg: number) {
+	surfaceCollide(collX: number, collY: number, bearingDeg: number) {
 
 	}
 }

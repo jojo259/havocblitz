@@ -5,6 +5,6 @@ import { spawnEntity } from "../entitymanager";
 
 export class RocketLauncher extends ProjectileShooter {
 	constructor() {
-		super("./game/sprites/items/rocketlauncher.png", rocketSpeed, (posX, posY, velocityX, velocityY) => new Rocket(posX, posY, velocityX, velocityY));
+		super("./game/sprites/items/rocketlauncher.png", rocketSpeed, (posX, posY, velocityX, velocityY, owner) => new Rocket(posX, posY, velocityX, velocityY, owner));
 	}
 }

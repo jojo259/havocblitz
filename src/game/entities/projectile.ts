@@ -8,12 +8,14 @@ import { Player } from "./player";
 export class Projectile extends PhysicsEntity {
 
 	drawDiameter: number;
+	owner: Player;
 
-	constructor(posX: number, posY: number, diameter: number, drawDiameter: number, velocityX: number, velocityY: number, spriteSrc: string, color: number[]) {
+	constructor(posX: number, posY: number, diameter: number, drawDiameter: number, velocityX: number, velocityY: number, spriteSrc: string, color: number[], owner: Player) {
 		super(posX, posY, diameter, spriteSrc, color);
 		this.velocityX = velocityX;
 		this.velocityY = velocityY;
 		this.drawDiameter = drawDiameter;
+		this.owner = owner;
 	}
 
 	tick() {
@@ -25,5 +27,9 @@ export class Projectile extends PhysicsEntity {
 		if (this.sprite) {
 			drawImageRelativeCircularRotated(this.sprite, this.posX, this.posY, this.drawDiameter, projectileBearing * (180 / Math.PI));
 		}
+	}
+
+	playerCollide(player: Player) {
+
 	}
 }

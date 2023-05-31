@@ -11,8 +11,8 @@ const rocketDamage = 25;
 
 export class Rocket extends Projectile {
 
-	constructor(posX: number, posY: number, velocityX: number, velocityY: number) {
-		super(posX, posY, 0.8, 1, velocityX, velocityY, "./game/sprites/entities/rocket.png", [0.5, 0, 0]);
+	constructor(posX: number, posY: number, velocityX: number, velocityY: number, owner: Player) {
+		super(posX, posY, 0.8, 1, velocityX, velocityY, "./game/sprites/entities/rocket.png", [0.5, 0, 0], owner);
 	}
 
 	tick() {
@@ -24,7 +24,15 @@ export class Rocket extends Projectile {
 		spawnParticlesAtPoint(this.posX - this.velocityX, this.posY - this.velocityY, 8, 0.1, 0.5, 0.1, 0.1, 100, ["#f00", "#f90", "#ff0"]);
 	}
 
-	collide (collX: number, collY: number, bearingDeg: number) {
+	surfaceCollide(collX: number, collY: number, bearingDeg: number) {
+		this.explode(collX, collY);
+	}
+
+	playerCollide(player: Player) {
+		this.explode(this.posX, this.posY);
+	}
+
+	explode(collX: number, collY: number) {
 		spawnParticlesAtPoint(collX - this.velocityX, collY - this.velocityY, 64, 0.1, 1, 0.5, 0.5, 250, ["#f00", "#f90", "#ff0"]);
 		spawnParticlesAtPoint(collX - this.velocityX, collY - this.velocityY, 64, 0.5, 3, 0.1, 0.1, 500, ["#aaa", "#ccc", "#fff"]);
 		entityList.forEach(entity => {

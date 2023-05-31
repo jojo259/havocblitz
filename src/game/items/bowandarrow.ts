@@ -5,6 +5,6 @@ import { spawnEntity } from "../entitymanager";
 
 export class BowAndArrow extends ProjectileShooter {
 	constructor() {
-		super("./game/sprites/items/bowandarrow.png", arrowSpeed, (posX, posY, velocityX, velocityY) => new Arrow(posX, posY, velocityX, velocityY));
+		super("./game/sprites/items/bowandarrow.png", arrowSpeed, (posX, posY, velocityX, velocityY, owner) => new Arrow(posX, posY, velocityX, velocityY, owner));
 	}
 }

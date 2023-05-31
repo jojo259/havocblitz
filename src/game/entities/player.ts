@@ -9,12 +9,16 @@ import { toggleDebugVisuals } from "../render/renderer";
 import { PlayerUse } from "../events/playeruse";
 import { CountryCode } from "../events/countrycode";
 import { MapSend } from "../events/mapsend";
-import { getBearing } from "../util";
+import { getBearing, getDist } from "../util";
 import { Item } from "../items/item";
 import { RocketLauncher } from "../items/rocketlauncher";
 import { BowAndArrow } from "../items/bowandarrow";
 import { PlayerHeldItemSlot } from "../events/playerhelditemslot";
 import { PlayerHealth } from "../events/playerhealth";
+import { entityList } from "../entitymanager";
+import { Entity } from "./entity";
+import { Projectile } from "./projectile";
+import { PlayerProjectileHit } from "../events/playerprojectilehit";
 
 const playerMaxHealth = 100;
 
@@ -109,6 +113,7 @@ export class Player extends PhysicsEntity {
 			if (keyPressed["scrollUp"] || keyPressed["e"]) {
 				this.setHeldItemSlot(this.heldItemSlot + 1);
 			}
+			this.checkProjectileCollisions();
 			queueEvent(new PlayerUpdate(this.posX, this.posY, this.velocityX, this.velocityY, mousePos));
 			if (this.countryCode == "null" && Math.random() <= 0.01) {
 				this.checkCountryCode();
@@ -120,6 +125,45 @@ export class Player extends PhysicsEntity {
 				queueEvent(new MapSend());
 			}
 		}
+	}
+
+	checkProjectileCollisions() {
+		entityList.forEach((entity: Entity) => {
+			if (entity instanceof Projectile) {
+				if (entity.owner != this) {
+					if (getDist(this.posX, this.posY, entity.posX, entity.posY) <= this.diameter / 2 + entity.diameter / 2) {
+						this.projectileHit(entity);
+					}
+				}
+			}
+		});
+	}
+
+	projectileHitSearch(byPlayer: string) { // LITTLE BIT SILLY
+		let closestMatchingProjectile: Projectile | null = null;
+		let closestMatchingProjectileDist = 999;
+		entityList.forEach(projectile => {
+			if (projectile instanceof Projectile) {
+				if (projectile.owner.id == byPlayer) {
+					let dist = getDist(this.posX, this.posY, projectile.posX, projectile.posY);
+					if (dist < closestMatchingProjectileDist) {
+						closestMatchingProjectile = projectile;
+						closestMatchingProjectileDist = dist;
+					}
+				}
+			}
+		});
+		if (closestMatchingProjectile) {
+			this.projectileHit(closestMatchingProjectile);
+		}
+	}
+
+	projectileHit(projectile: Projectile) {
+		projectile.playerCollide(this);
+		if (this.isClient) {
+			queueEvent(new PlayerProjectileHit(projectile.owner.id));
+		}
+		projectile.destroy();
 	}
 
 	changeHealth(by: number) {
@@ -138,7 +182,7 @@ export class Player extends PhysicsEntity {
 		this.findSpawn();
 	}
 
-	collide (collX: number, collY: number, bearingDeg: number) {
+	surfaceCollide(collX: number, collY: number, bearingDeg: number) {
 		this.freeFalling = false;
 
 		if (Math.abs(bearingDeg) <= 45) {

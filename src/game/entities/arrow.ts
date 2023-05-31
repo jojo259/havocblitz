@@ -9,8 +9,8 @@ export let arrowSpeed = 0.8;
 
 export class Arrow extends Projectile {
 
-	constructor(posX: number, posY: number, velocityX: number, velocityY: number) {
-		super(posX, posY, 0.4, 3, velocityX, velocityY, "./game/sprites/entities/arrow.png", [0, 0, 0]);
+	constructor(posX: number, posY: number, velocityX: number, velocityY: number, owner: Player) {
+		super(posX, posY, 0.4, 3, velocityX, velocityY, "./game/sprites/entities/arrow.png", [0, 0, 0], owner);
 	}
 
 	tick() {
@@ -22,7 +22,13 @@ export class Arrow extends Projectile {
 		spawnParticlesAtPoint(this.posX - this.velocityX, this.posY - this.velocityY, 8, 0.1, 0.3, 0.1, 0.1, 100, ["#fff", "#eee", "#ddd"]);
 	}
 
-	collide (collX: number, collY: number, bearingDeg: number) {
+	surfaceCollide(collX: number, collY: number, bearingDeg: number) {
 		this.destroy();
+	}
+
+	playerCollide(player: Player) {
+		if (player.isClient) {
+			player.changeHealth(-5);
+		}
 	}
 }
