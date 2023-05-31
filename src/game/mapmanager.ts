@@ -10,8 +10,8 @@ tileTopImage.src = "./game/sprites/tiletop.png";
 
 let mapDensity = 40; //Change for more or less density (ranges from 1-100)
 let genAmount = 2; //how many cycles to generate
-export let mapWidth = 300;
-export let mapHeight = 200;
+export let mapWidth = 80;
+export let mapHeight = 40;
 export let currentMapGeneratedTimestamp = Date.now();
 
 export function setCurrentMapGeneratedTimestamp(to: number) {
