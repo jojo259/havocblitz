@@ -203,9 +203,7 @@ export class Player extends PhysicsEntity {
 	}
 
 	outOfBounds() {
-		this.velocityX = 0;
-		this.velocityY = 0;
-		this.findSpawn();
+		this.die();
 	}
 
 	checkCountryCode() {
