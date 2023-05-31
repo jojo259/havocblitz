@@ -7,6 +7,7 @@ import { LatencyCheckPong } from "./events/latencycheckpong";
 import { PlayerUse } from "./events/playeruse";
 import { CountryCode } from "./events/countrycode";
 import { PlayerHeldItemSlot } from "./events/playerhelditemslot";
+import { PlayerHealth } from "./events/playerhealth";
 
 let peersLastReceivedEventsFrom: Dictionary<number> = {};
 
@@ -27,6 +28,7 @@ const funcDict: Dictionary<Function> = {
 	"PlayerUse": (JSON: any) => PlayerUse.doEvent(JSON),
 	"CountryCode": (JSON: any) => CountryCode.doEvent(JSON),
 	"PlayerHeldItemSlot": (JSON: any) => PlayerHeldItemSlot.doEvent(JSON),
+	"PlayerHealth": (JSON: any) => PlayerHealth.doEvent(JSON),
 };
 
 export function ingestEventsToProcess(receivedEvents: any) {

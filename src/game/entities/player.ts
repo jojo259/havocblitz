@@ -14,6 +14,7 @@ import { Item } from "../items/item";
 import { RocketLauncher } from "../items/rocketlauncher";
 import { BowAndArrow } from "../items/bowandarrow";
 import { PlayerHeldItemSlot } from "../events/playerhelditemslot";
+import { PlayerHealth } from "../events/playerhealth";
 
 const playerMaxHealth = 100;
 
@@ -127,6 +128,7 @@ export class Player extends PhysicsEntity {
 			this.die();
 		}
 		this.health = Math.min(this.health, playerMaxHealth);
+		queueEvent(new PlayerHealth(this.health));
 	}
 
 	die() {
