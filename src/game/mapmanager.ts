@@ -14,6 +14,12 @@ export let mapWidth = 80;
 export let mapHeight = 40;
 export let currentMapGeneratedTimestamp = Date.now();
 
+export let tileMap: number[][];
+
+export function genMap() {
+	tileMap = generateMap(mapWidth, mapHeight)	
+}
+
 export function setCurrentMapGeneratedTimestamp(to: number) {
 	currentMapGeneratedTimestamp = to;
 }
@@ -229,5 +235,3 @@ function slopifyMap(mapArray: number[][]): number[][] {
 
 	return mapArray;
 }
-
-export let tileMap = generateMap(mapWidth, mapHeight);
