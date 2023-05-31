@@ -30,6 +30,7 @@ export class Arrow extends Projectile {
 		if (player.isClient) {
 			player.changeHealth(-5);
 		}
+		player.bleed();
 		this.destroy();
 	}
 }

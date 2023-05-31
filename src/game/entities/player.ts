@@ -174,6 +174,10 @@ export class Player extends PhysicsEntity {
 		queueEvent(new PlayerHealth(this.health));
 	}
 
+	bleed() {
+		spawnParticlesAtPoint(this.posX, this.posY, 32, 0.1, 0.3, 0.5, 0.5, 100, ["#f00", "#d00", "#b00"]);
+	}
+
 	die() {
 		this.health = playerMaxHealth;
 		this.velocityX = 0;
