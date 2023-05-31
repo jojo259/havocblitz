@@ -143,10 +143,12 @@ function pruneMap(mapArray: number[][]): number[][] {
 	let height = mapArray[0].length;
 	for(let pass = 1; pass <= 64; pass++) {
 		let prunedCount = 0;
-		for(let x = 2; x < width - 2; x++) {
-			for(let y = 2; y < height - 2; y++) {
+		for(let x = 1; x < width - 1; x++) {
+			for(let y = 1; y < height - 1; y++) {
 				if (mapArray[x][y] == 1) {
-					let farNeighbors = 0;
+					let farNeighbors = 0; // here, neighbors are in the cardinal directions and diagonals
+					let touchingNeighbors = 0; // here, neighbors are only in the 4 main directions, no diagonals
+					let neighborsString = ""; // here, a 4-char string is constructed representing the cardinal direction neighbors
 					for (let i = -1; i <= 1; i++){
 						for (let j = -1; j <= 1; j++){
 							if (i != 0 || j != 0){
@@ -154,22 +156,10 @@ function pruneMap(mapArray: number[][]): number[][] {
 									farNeighbors += 1;
 								}
 							}
-						}
-					}
-					let touchingNeighbors = 0; // here, neighbors are only in the 4 main directions, no diagonals
-					for (let i = -1; i <= 1; i++){
-						for (let j = -1; j <= 1; j++){
 							if (Math.abs(i) != Math.abs(j)){
 								if (mapArray[x + i][y + j] == 1) {
 									touchingNeighbors += 1;
 								}
-							}
-						}
-					}
-					let neighborsString = "";
-					for (let i = -1; i <= 1; i++){
-						for (let j = -1; j <= 1; j++){
-							if (Math.abs(i) != Math.abs(j)){
 								if (mapArray[x + i][y + j] == 0) {
 									neighborsString += "0";
 								}
