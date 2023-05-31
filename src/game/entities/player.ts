@@ -163,7 +163,6 @@ export class Player extends PhysicsEntity {
 		if (this.isClient) {
 			queueEvent(new PlayerProjectileHit(projectile.owner.id));
 		}
-		projectile.destroy();
 	}
 
 	changeHealth(by: number) {
