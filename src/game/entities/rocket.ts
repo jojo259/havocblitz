@@ -7,6 +7,7 @@ import { Player } from "./player";
 export let rocketSpeed = 0.5;
 let rocketExplosionMaxDist = 3;
 let rocketExplosionEnergy = 0.4;
+const rocketDamage = 25;
 
 export class Rocket extends Projectile {
 
@@ -28,14 +29,17 @@ export class Rocket extends Projectile {
 		spawnParticlesAtPoint(collX - this.velocityX, collY - this.velocityY, 64, 0.5, 3, 0.1, 0.1, 500, ["#aaa", "#ccc", "#fff"]);
 		entityList.forEach(entity => {
 			if (entity instanceof Player) {
-				let dist = getDist(collX, collY, entity.posX, entity.posY);
-				if (dist < rocketExplosionMaxDist) {
-					let bearing = getBearing(collX, collY, entity.posX, entity.posY);
-					entity.velocityX = Math.cos(bearing) * rocketExplosionEnergy;
-					entity.velocityY = Math.sin(bearing) * rocketExplosionEnergy;
-					entity.posX += entity.velocityX;
-					entity.posY += entity.velocityY;
-					entity.freeFalling = true;
+				if (entity.isClient) {
+					let dist = getDist(collX, collY, entity.posX, entity.posY);
+					if (dist < rocketExplosionMaxDist) {
+						let bearing = getBearing(collX, collY, entity.posX, entity.posY);
+						entity.velocityX = Math.cos(bearing) * rocketExplosionEnergy;
+						entity.velocityY = Math.sin(bearing) * rocketExplosionEnergy;
+						entity.posX += entity.velocityX;
+						entity.posY += entity.velocityY;
+						entity.freeFalling = true;
+						entity.changeHealth(-rocketDamage)
+					}
 				}
 			}
 		});

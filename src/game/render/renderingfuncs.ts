@@ -108,15 +108,15 @@ export function drawImage(image: HTMLImageElement, drawX: number, drawY: number,
 	canvasContext.drawImage(image, drawX * canvasScale, drawY * canvasScale, drawSizeX * canvasScale, drawSizeY * canvasScale);
 }
 
-export function drawText(content: string, color: string, drawX: number, drawY: number) {
-	canvasContext.font = "16px BabelStoneFlags";
+export function drawText(content: string, color: string, size: number, drawX: number, drawY: number) {
+	canvasContext.font = size + "px BabelStoneFlags";
 	canvasContext.fillStyle = color;
 	canvasContext.textAlign = "center";
 	canvasContext.fillText(content, drawX, drawY);
 }
 
-export function drawTextRelative(content: string, color: string, drawX: number, drawY: number) {
-	drawText(content, color, getRelativeX(drawX), getRelativeY(drawY));
+export function drawTextRelative(content: string, color: string, size: number, drawX: number, drawY: number) {
+	drawText(content, color, size * canvasScale, getRelativeX(drawX), getRelativeY(drawY));
 }
 
 export function drawCircleRelative(x: number, y: number, diameter: number, color: string) {

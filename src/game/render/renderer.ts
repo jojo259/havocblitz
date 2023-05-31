@@ -86,7 +86,7 @@ function renderNetGraph() {
 	let atPeer = 0;
 	Object.entries(peerLatencies).forEach(([peerId, latenciesArray]) => {
 		let atY = canvasElem.height - (atPeer + 1) * 16;
-		drawText(peerId + ": " + Math.floor(getAverage(latenciesArray)).toString(), "black", 100, atY);
+		drawText(peerId + ": " + Math.floor(getAverage(latenciesArray)).toString(), "black", 16, 100, atY);
 		let atX = 200 + atPeer * 60;
 		latenciesArray.forEach((latency) => {
 			atX += 1;

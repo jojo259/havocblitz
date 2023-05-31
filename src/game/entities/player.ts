@@ -1,6 +1,6 @@
 import { PhysicsEntity } from "./physicsentity";
 import { keyState, keyPressed, mousePos } from "../inputtracker";
-import { drawTextRelative, drawImageRelativeCircularRotated } from "../render/renderingfuncs";
+import { drawTextRelative, drawImageRelativeCircularRotated, drawLineRelative } from "../render/renderingfuncs";
 import { spawnParticlesAtPoint } from "../render/particlespawner";
 import { queueEvent } from "../tickingmanager";
 import { PlayerUpdate } from "../events/playerupdate";
@@ -14,6 +14,8 @@ import { Item } from "../items/item";
 import { RocketLauncher } from "../items/rocketlauncher";
 import { BowAndArrow } from "../items/bowandarrow";
 import { PlayerHeldItemSlot } from "../events/playerhelditemslot";
+
+const playerMaxHealth = 100;
 
 interface PlayerItems extends Array<Item> {
 	[index: number]: Item;
@@ -49,6 +51,7 @@ export class Player extends PhysicsEntity {
 	isClient = false;
 	canJump = false;
 	canWallJumpOnSide = 0; // 0 = cannot, 1 = right side, -1 = left side
+	health = playerMaxHealth;
 
 	constructor(
 		id: string,
@@ -68,6 +71,9 @@ export class Player extends PhysicsEntity {
 	tick(): void {
 		if (this.isClient) {
 			super.tick();
+			if (Math.random() <= 0.1) {
+				this.changeHealth(1);
+			}
 			this.mousePos = mousePos;
 			if (keyPressed["w"] || keyPressed[" "]) {
 				if (this.canJump || Math.abs(this.canWallJumpOnSide) == 1) {
@@ -115,6 +121,21 @@ export class Player extends PhysicsEntity {
 		}
 	}
 
+	changeHealth(by: number) {
+		this.health += by;
+		if (this.health <= 0) {
+			this.die();
+		}
+		this.health = Math.min(this.health, playerMaxHealth);
+	}
+
+	die() {
+		this.health = playerMaxHealth;
+		this.velocityX = 0;
+		this.velocityY = 0;
+		this.findSpawn();
+	}
+
 	collide (collX: number, collY: number, bearingDeg: number) {
 		this.freeFalling = false;
 
@@ -142,8 +163,10 @@ export class Player extends PhysicsEntity {
 	draw(): void {
 		super.draw();
 		drawImageRelativeCircularRotated(playerItems[this.heldItemSlot].sprite, this.posX + 0.2, this.posY + 0.2, 0.8, getBearing(this.posX, this.posY, this.mousePos.x, this.mousePos.y) * (180 / Math.PI));
-		drawTextRelative(this.id, "black", this.posX, this.posY - 0.8);
-		drawTextRelative(this.flagEmoji, "black", this.posX, this.posY - 1.2);
+		drawTextRelative(this.flagEmoji, "black", 0.4, this.posX, this.posY - 1.4);
+		drawTextRelative(this.id, "black", 0.4, this.posX, this.posY - 1);
+		drawLineRelative(this.posX - 1, this.posY - 0.8, this.posX + 1, this.posY - 0.8, 0.15, "#f00");
+		drawLineRelative(this.posX - 1, this.posY - 0.8, this.posX - 1 + this.health / playerMaxHealth * 2, this.posY - 0.8, 0.15, "#0f0");
 	}
 
 	jump() {
