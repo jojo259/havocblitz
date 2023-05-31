@@ -25,6 +25,8 @@ export class PlayerUpdate extends Event {
 				if (entity.id == json.peerId) {
 					entity.posX = json.posX;
 					entity.posY = json.posY;
+					entity.velocityX = json.velocityX;
+					entity.velocityY = json.pvelocity;
 					entity.mousePos = json.mousePos;
 				}
 			}
