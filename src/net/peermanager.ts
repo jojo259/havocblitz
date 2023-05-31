@@ -3,6 +3,8 @@ import { Player } from "../game/entities/player";
 import { addNewPlayer, clientPlayerEntity } from "../game/entitymanager";
 import { ingestEventsToProcess } from "../game/eventingestor";
 import { debugMode } from "../page/debugmode";
+import { queueEvent } from "../game/tickingmanager";
+import { MapSend } from "../game/events/mapsend";
 
 export let peerIdPrefix = "havocblitz";
 export let maxPeerIdNum = 16;
@@ -96,6 +98,7 @@ export function ingestPotentialPeerConnection(conn: DataConnection){
 		console.log("connected to peer")
 		peerConnections[conn.peer] = conn;
 		addNewPlayer(conn.peer);
+		queueEvent(new MapSend());
 	});
 	conn.on("close", () => {
 		console.log("connection closed");
